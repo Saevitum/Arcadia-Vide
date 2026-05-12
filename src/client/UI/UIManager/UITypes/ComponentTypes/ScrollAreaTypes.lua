@@ -1,10 +1,13 @@
 --!strict
 
 local SharedTypes = require(script.Parent.Parent.SharedTypes)
+local EffectTypes = require(script.Parent.Parent.EffectTypes)
 
 export type Reactive = SharedTypes.Reactive
+export type TweenGuiObjectLayoutOptions = EffectTypes.TweenGuiObjectLayoutOptions
 
 export type ScrollAreaLayoutKind = "Grid" | "List" | "None"
+export type ScrollAreaChildren = Instance | { Instance } | (() -> Instance?) | (() -> { Instance })
 
 export type ScrollAreaPaddingProps = {
 	top: Reactive?,
@@ -34,40 +37,34 @@ export type ScrollAreaListProps = {
 
 export type ScrollAreaProps = {
 	name: string?,
-
 	size: Reactive?,
 	position: Reactive?,
 	anchorPoint: Reactive?,
 	visible: Reactive?,
 	zIndex: Reactive?,
 	layoutOrder: Reactive?,
-
+	layoutTween: TweenGuiObjectLayoutOptions?,
 	backgroundTransparency: Reactive?,
 	backgroundColor3: Reactive?,
 	clipsDescendants: boolean?,
-
+	syncGridCanvas: boolean?,
+	canvasBottomSafetyScale: Reactive?,
+	canvasHeightScale: Reactive?,
 	canvasSize: Reactive?,
 	automaticCanvasSize: Enum.AutomaticSize?,
 	scrollingDirection: Enum.ScrollingDirection?,
 	scrollingEnabled: Reactive?,
-
 	scrollBarThickness: Reactive?,
 	scrollBarImageColor3: Reactive?,
 	scrollBarImageTransparency: Reactive?,
 	elasticBehavior: Enum.ElasticBehavior?,
 	verticalScrollBarInset: Enum.ScrollBarInset?,
 	horizontalScrollBarInset: Enum.ScrollBarInset?,
-
 	padding: ScrollAreaPaddingProps?,
 	layoutKind: ScrollAreaLayoutKind?,
 	grid: ScrollAreaGridProps?,
 	list: ScrollAreaListProps?,
-
-	layoutTween: any?,
-	syncGridCanvas: boolean?,
-	canvasBottomSafetyScale: Reactive?,
-
-	children: any?,
+	children: ScrollAreaChildren?,
 }
 
 return {}

@@ -6,9 +6,4 @@ export type ActivityMenuProps = {
 	store: StoreTypes.UIStore,
 }
 
-export type ActivityRow = {
-	label: string,
-	value: string,
-}
-
 return {}

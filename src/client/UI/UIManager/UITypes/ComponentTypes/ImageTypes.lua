@@ -4,13 +4,6 @@ local SharedTypes = require(script.Parent.Parent.SharedTypes)
 
 export type Reactive = SharedTypes.Reactive
 
-export type ImageStrokeProps = {
-	thickness: Reactive?,
-	color: Reactive?,
-	transparency: Reactive?,
-	applyStrokeMode: Enum.ApplyStrokeMode?,
-}
-
 export type ImageGradientProps = {
 	color: ColorSequence?,
 	transparency: NumberSequence?,
@@ -18,10 +11,16 @@ export type ImageGradientProps = {
 	offset: Vector2?,
 }
 
+export type ImageStrokeProps = {
+	thickness: Reactive?,
+	color: Reactive?,
+	transparency: Reactive?,
+	applyStrokeMode: Enum.ApplyStrokeMode?,
+}
+
 export type ImageProps = {
 	name: string?,
 	image: Reactive?,
-
 	size: Reactive?,
 	position: Reactive?,
 	anchorPoint: Reactive?,
@@ -29,17 +28,13 @@ export type ImageProps = {
 	visible: Reactive?,
 	zIndex: Reactive?,
 	layoutOrder: Reactive?,
-
 	backgroundTransparency: Reactive?,
 	backgroundColor3: Reactive?,
-
 	imageColor3: Reactive?,
 	imageTransparency: Reactive?,
-
 	scaleType: Enum.ScaleType?,
 	sliceCenter: Rect?,
 	sliceScale: number?,
-
 	cornerRadius: Reactive?,
 	stroke: ImageStrokeProps?,
 	gradient: ImageGradientProps?,

@@ -22,7 +22,6 @@ export type SkinView = {
 	ImageId: string,
 	Rarity: SkinRarity,
 	Description: string,
-
 	Owned: boolean,
 	Equipped: boolean,
 	Locked: boolean,

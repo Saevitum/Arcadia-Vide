@@ -31,6 +31,7 @@ export type SkinView = InventoryTypes.SkinView
 export type InventoryTabDefinition = InventoryTypes.InventoryTabDefinition
 
 export type SettingsTab = SettingsTypes.SettingsTab
+
 export type AchievementCategory = AchievementTypes.AchievementCategory
 export type AchievementState = AchievementTypes.AchievementState
 

@@ -1,7 +1,6 @@
 --!strict
 
 local SharedTypes = require(script.Parent.SharedTypes)
-
 local FadeGuiObjectTypes = require(script.FadeGuiObjectTypes)
 local HoverUIScaleTypes = require(script.HoverUIScaleTypes)
 local PulseUIScaleTypes = require(script.PulseUIScaleTypes)
@@ -59,16 +58,13 @@ export type TweenGuiObjectLayoutOptions = {
 	isOpen: (() -> boolean)?,
 	targetSize: (() -> UDim2)?,
 	targetPosition: (() -> UDim2)?,
-
 	duration: number?,
 	easingStyle: Enum.EasingStyle?,
 	easingDirection: Enum.EasingDirection?,
-
 	openEasingStyle: Enum.EasingStyle?,
 	openEasingDirection: Enum.EasingDirection?,
 	closeEasingStyle: Enum.EasingStyle?,
 	closeEasingDirection: Enum.EasingDirection?,
-
 	bounce: TweenGuiObjectLayoutBounceOptions?,
 }
 
