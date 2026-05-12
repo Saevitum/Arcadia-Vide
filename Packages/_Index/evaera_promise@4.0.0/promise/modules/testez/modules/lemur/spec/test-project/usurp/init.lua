@@ -1,3 +1,0 @@
---!nocheck
---!nolint
--- init.lua
