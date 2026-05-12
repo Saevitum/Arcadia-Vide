@@ -3,7 +3,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Vide = require(ReplicatedStorage.Packages.vide)
-local Types = require(script.Parent.Parent.Parent.UITypes)
+local Types = require(script.Parent.Parent.Parent.UITypes.MenuTypes)
 local MockAchievements = require(script.Parent.MockAchievements)
 local Style = require(script.Parent.Style)
 local TabButton = require(script.Parent.TabButton)

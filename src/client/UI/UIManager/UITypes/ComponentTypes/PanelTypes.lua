@@ -1,11 +1,33 @@
 --!strict
 
+local SharedTypes = require(script.Parent.Parent.SharedTypes)
 local StoreTypes = require(script.Parent.Parent.StoreTypes)
 local MenuIdTypes = require(script.Parent.Parent.MenuTypes.MenuIdTypes)
 
+export type Reactive<T> = SharedTypes.Reactive<T>
+export type UIStore = StoreTypes.UIStore
+export type MenuId = MenuIdTypes.MenuId
+
+export type BackgroundProps = {
+	size: UDim2?,
+	position: UDim2?,
+	anchorPoint: Vector2?,
+}
+
+export type ExitButtonProps = {
+	onClick: (() -> ())?,
+	position: UDim2?,
+	size: UDim2?,
+	anchorPoint: Vector2?,
+}
+
+export type HeaderProps = {
+	text: string | (() -> string)?,
+}
+
 export type PanelProps = {
-	store: StoreTypes.UIStore,
-	menuId: MenuIdTypes.MenuId,
+	store: UIStore,
+	menuId: MenuId,
 	name: string?,
 	title: string | (() -> string)?,
 	size: UDim2?,

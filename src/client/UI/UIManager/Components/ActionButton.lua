@@ -3,7 +3,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Vide = require(ReplicatedStorage.Packages.vide)
-local Types = require(script.Parent.Parent.UITypes)
+local Types = require(script.Parent.Parent.UITypes.ComponentTypes)
 local Effects = require(script.Parent.Parent.Effects)
 local Text = require(script.Parent.Text)
 

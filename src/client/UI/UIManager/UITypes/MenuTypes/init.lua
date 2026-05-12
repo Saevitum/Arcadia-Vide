@@ -1,6 +1,8 @@
 --!strict
 
+local SharedTypes = require(script.Parent.SharedTypes)
 local MenuIdTypes = require(script.MenuIdTypes)
+
 local SideKickTypes = require(script.SideKickTypes)
 local BoostersTypes = require(script.BoostersTypes)
 local ActivityTypes = require(script.ActivityTypes)
@@ -11,6 +13,9 @@ local AchievementTypes = require(script.AchievementTypes)
 local RewardsTypes = require(script.RewardsTypes)
 local SettingsTypes = require(script.SettingsTypes)
 local ShopTypes = require(script.ShopTypes)
+
+export type Source<T> = SharedTypes.Source<T>
+export type Reactive<T> = SharedTypes.Reactive<T>
 
 export type MenuId = MenuIdTypes.MenuId
 
@@ -25,18 +30,15 @@ export type RewardsMenuProps = RewardsTypes.RewardsMenuProps
 export type SettingsMenuProps = SettingsTypes.SettingsMenuProps
 export type ShopMenuProps = ShopTypes.ShopMenuProps
 
+export type SettingsTab = SettingsTypes.SettingsTab
 export type InventoryTabId = InventoryTypes.InventoryTabId
 export type SkinRarity = InventoryTypes.SkinRarity
-export type SkinView = InventoryTypes.SkinView
-export type InventoryTabDefinition = InventoryTypes.InventoryTabDefinition
-
-export type SettingsTab = SettingsTypes.SettingsTab
-
+export type SkinItem = InventoryTypes.SkinItem
 export type AchievementCategory = AchievementTypes.AchievementCategory
-export type AchievementState = AchievementTypes.AchievementState
 
 return {
 	MenuIdTypes = MenuIdTypes,
+
 	SideKickTypes = SideKickTypes,
 	BoostersTypes = BoostersTypes,
 	ActivityTypes = ActivityTypes,

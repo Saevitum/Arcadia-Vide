@@ -1,9 +1,14 @@
 --!strict
 
+local SharedTypes = require(script.Parent.Parent.SharedTypes)
 local StoreTypes = require(script.Parent.Parent.StoreTypes)
 
+export type Source<T> = SharedTypes.Source<T>
+export type Reactive<T> = SharedTypes.Reactive<T>
+export type UIStore = StoreTypes.UIStore
+
 export type InventoryMenuProps = {
-	store: StoreTypes.UIStore,
+	store: UIStore,
 }
 
 export type InventoryTabId = "Skins" | "Ranks" | "Quests"
@@ -16,7 +21,7 @@ export type SkinRarity =
 	| "Legendary"
 	| "Mythic"
 
-export type SkinView = {
+export type SkinItem = {
 	SkinId: string,
 	Name: string,
 	ImageId: string,
@@ -25,13 +30,6 @@ export type SkinView = {
 	Owned: boolean,
 	Equipped: boolean,
 	Locked: boolean,
-}
-
-export type InventoryTabDefinition = {
-	id: InventoryTabId,
-	label: string,
-	hasAlert: boolean?,
-	layoutOrder: number,
 }
 
 return {}

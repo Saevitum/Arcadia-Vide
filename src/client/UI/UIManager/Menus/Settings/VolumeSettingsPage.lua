@@ -1,6 +1,6 @@
 --!strict
 
-local Types = require(script.Parent.Parent.Parent.UITypes)
+local Types = require(script.Parent.Parent.Parent.UITypes.MenuTypes)
 local SettingsPage = require(script.Parent.SettingsPage)
 local VolumeSettingRow = require(script.Parent.VolumeSettingRow)
 

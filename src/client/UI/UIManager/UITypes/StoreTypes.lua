@@ -3,12 +3,11 @@
 local SharedTypes = require(script.Parent.SharedTypes)
 local MenuIdTypes = require(script.Parent.MenuTypes.MenuIdTypes)
 
-export type Source = SharedTypes.Source
-export type SourceOf<T> = SharedTypes.SourceOf<T>
+export type Source<T> = SharedTypes.Source<T>
 export type MenuId = MenuIdTypes.MenuId
 
 export type UIStore = {
-	currentMenu: SourceOf<MenuId?>,
+	currentMenu: Source<MenuId?>,
 }
 
 return {}

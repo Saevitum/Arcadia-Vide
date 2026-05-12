@@ -4,7 +4,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local Vide = require(ReplicatedStorage.Packages.vide)
-local Types = require(script.Parent.Parent.UITypes)
+local Types = require(script.Parent.Parent.UITypes.EffectTypes)
 
 Vide.strict = true
 

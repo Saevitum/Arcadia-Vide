@@ -1,7 +1,7 @@
 --!strict
 
 local Device = require(script.Parent.Device)
-local Types = require(script.Parent.UITypes)
+local Types = require(script.Parent.UITypes.DeviceTypes)
 
 local Layout = {}
 

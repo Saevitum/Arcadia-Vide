@@ -4,7 +4,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 
 local Vide = require(ReplicatedStorage.Packages.vide)
-local Types = require(script.Parent.Parent.UITypes)
+local Types = require(script.Parent.Parent.UITypes.ComponentTypes)
 local Effects = require(script.Parent.Parent.Effects)
 
 Vide.strict = true

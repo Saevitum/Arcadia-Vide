@@ -1,6 +1,6 @@
 --!strict
 
-local Types = require(script.Parent.Parent.Parent.UITypes)
+local Types = require(script.Parent.Parent.Parent.UITypes.MenuTypes)
 
 local MockAchievements = require(script.Parent.MockAchievements)
 local AchievementPage = require(script.Parent.AchievementPage)

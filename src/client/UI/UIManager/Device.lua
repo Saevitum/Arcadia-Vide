@@ -3,7 +3,7 @@
 local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
 
-local Types = require(script.Parent.UITypes)
+local Types = require(script.Parent.UITypes.DeviceTypes)
 
 local Device = {}
 

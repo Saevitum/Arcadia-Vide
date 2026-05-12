@@ -1,9 +1,14 @@
 --!strict
 
+local SharedTypes = require(script.Parent.Parent.SharedTypes)
 local StoreTypes = require(script.Parent.Parent.StoreTypes)
 
+export type Source<T> = SharedTypes.Source<T>
+export type Reactive<T> = SharedTypes.Reactive<T>
+export type UIStore = StoreTypes.UIStore
+
 export type AchievementsMenuProps = {
-	store: StoreTypes.UIStore,
+	store: UIStore,
 }
 
 export type AchievementCategory =
@@ -17,7 +22,5 @@ export type AchievementCategory =
 	| "Quests"
 	| "SideKicks"
 	| "Placeholder"
-
-export type AchievementState = "Available" | "NotReady" | "Claimed"
 
 return {}

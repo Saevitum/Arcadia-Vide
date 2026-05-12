@@ -2,8 +2,7 @@
 
 local SharedTypes = require(script.Parent.Parent.SharedTypes)
 
-export type Reactive = SharedTypes.Reactive
-export type ReactiveOf<T> = SharedTypes.ReactiveOf<T>
+export type Reactive<T> = SharedTypes.Reactive<T>
 
 export type TextGradientProps = {
 	color: ColorSequence?,
@@ -19,31 +18,31 @@ export type TextPulseStrokeProps = {
 }
 
 export type TextStrokeProps = {
-	thickness: Reactive?,
-	color: Reactive?,
-	transparency: Reactive?,
+	thickness: Reactive<number>?,
+	color: Reactive<Color3>?,
+	transparency: Reactive<number>?,
 	pulse: TextPulseStrokeProps?,
 }
 
 export type TextProps = {
 	name: string?,
-	text: Reactive?,
-	size: Reactive?,
-	position: Reactive?,
-	anchorPoint: Reactive?,
-	rotation: Reactive?,
-	visible: Reactive?,
-	zIndex: Reactive?,
-	layoutOrder: Reactive?,
-	backgroundTransparency: Reactive?,
-	backgroundColor3: Reactive?,
+	text: Reactive<string>?,
+	size: Reactive<UDim2>?,
+	position: Reactive<UDim2>?,
+	anchorPoint: Reactive<Vector2>?,
+	rotation: Reactive<number>?,
+	visible: Reactive<boolean>?,
+	zIndex: Reactive<number>?,
+	layoutOrder: Reactive<number>?,
+	backgroundTransparency: Reactive<number>?,
+	backgroundColor3: Reactive<Color3>?,
 	fontFace: Font?,
 	textScaled: boolean?,
-	textSize: Reactive?,
+	textSize: Reactive<number>?,
 	minTextSize: number?,
 	maxTextSize: number?,
-	textColor3: Reactive?,
-	textTransparency: Reactive?,
+	textColor3: Reactive<Color3>?,
+	textTransparency: Reactive<number>?,
 	textXAlignment: Enum.TextXAlignment?,
 	textYAlignment: Enum.TextYAlignment?,
 	richText: boolean?,

@@ -1,99 +1,45 @@
 --!strict
 
 local SharedTypes = require(script.Parent.SharedTypes)
-local FadeGuiObjectTypes = require(script.FadeGuiObjectTypes)
+
+local HoverScaleTypes = require(script.HoverScaleTypes)
+local SpinTypes = require(script.SpinTypes)
 local HoverUIScaleTypes = require(script.HoverUIScaleTypes)
-local PulseUIScaleTypes = require(script.PulseUIScaleTypes)
+local TweenGuiObjectLayoutTypes = require(script.TweenGuiObjectLayoutTypes)
 local SlideFadeCanvasGroupTypes = require(script.SlideFadeCanvasGroupTypes)
+local PulseDriverTypes = require(script.PulseDriverTypes)
 local SweepGradientKeypointTypes = require(script.SweepGradientKeypointTypes)
+local PulseGradientOffsetTypes = require(script.PulseGradientOffsetTypes)
+local LiquidGradientTypes = require(script.LiquidGradientTypes)
+local FadeGuiObjectTypes = require(script.FadeGuiObjectTypes)
+local PulseUIScaleTypes = require(script.PulseUIScaleTypes)
 
-export type Source = SharedTypes.Source
-export type SourceOf<T> = SharedTypes.SourceOf<T>
+export type Source<T> = SharedTypes.Source<T>
+export type Reactive<T> = SharedTypes.Reactive<T>
 
-export type FadeGuiObjectOptions = FadeGuiObjectTypes.FadeGuiObjectOptions
+export type HoverScaleOptions = HoverScaleTypes.HoverScaleOptions
+export type SpinOptions = SpinTypes.SpinOptions
 export type HoverUIScaleOptions = HoverUIScaleTypes.HoverUIScaleOptions
-export type PulseUIScaleOptions = PulseUIScaleTypes.PulseUIScaleOptions
+export type TweenGuiObjectLayoutBounceOptions = TweenGuiObjectLayoutTypes.TweenGuiObjectLayoutBounceOptions
+export type TweenGuiObjectLayoutOptions = TweenGuiObjectLayoutTypes.TweenGuiObjectLayoutOptions
 export type SlideFadeCanvasGroupOptions = SlideFadeCanvasGroupTypes.SlideFadeCanvasGroupOptions
+export type PulseDriverOptions = PulseDriverTypes.PulseDriverOptions
 export type SweepGradientKeypointOptions = SweepGradientKeypointTypes.SweepGradientKeypointOptions
-
-export type HoverScaleOptions = {
-	scale: number?,
-	duration: number?,
-	easingStyle: Enum.EasingStyle?,
-	easingDirection: Enum.EasingDirection?,
-}
-
-export type SpinOptions = {
-	speed: number?,
-}
-
-export type SlideMenuOptions = {
-	open: () -> boolean,
-	openPosition: UDim2?,
-	enterPosition: UDim2?,
-	exitPosition: UDim2?,
-	duration: number?,
-}
-
-export type PulseStrokeOptions = {
-	colorA: Color3?,
-	colorB: Color3?,
-	duration: number?,
-}
-
-export type TweenGuiObjectLayoutBounceOptions = {
-	enabled: boolean?,
-	open: boolean?,
-	close: boolean?,
-	overshoot: number?,
-	firstDuration: number?,
-	settleDuration: number?,
-	firstEasingStyle: Enum.EasingStyle?,
-	firstEasingDirection: Enum.EasingDirection?,
-	settleEasingStyle: Enum.EasingStyle?,
-	settleEasingDirection: Enum.EasingDirection?,
-}
-
-export type TweenGuiObjectLayoutOptions = {
-	isOpen: (() -> boolean)?,
-	targetSize: (() -> UDim2)?,
-	targetPosition: (() -> UDim2)?,
-	duration: number?,
-	easingStyle: Enum.EasingStyle?,
-	easingDirection: Enum.EasingDirection?,
-	openEasingStyle: Enum.EasingStyle?,
-	openEasingDirection: Enum.EasingDirection?,
-	closeEasingStyle: Enum.EasingStyle?,
-	closeEasingDirection: Enum.EasingDirection?,
-	bounce: TweenGuiObjectLayoutBounceOptions?,
-}
-
-export type PulseGradientOffsetOptions = {
-	phase: (() -> number)?,
-	phaseMultiplier: number?,
-	minOffset: Vector2?,
-	maxOffset: Vector2?,
-}
-
-export type PulseDriverOptions = {
-	phase: SourceOf<number>,
-	duration: number?,
-	easingStyle: Enum.EasingStyle?,
-	easingDirection: Enum.EasingDirection?,
-}
-
-export type LiquidGradientOptions = {
-	duration: number?,
-	primaryColor: Color3?,
-	secondaryColor: Color3?,
-	disabledColor: Color3?,
-	enabled: (() -> boolean)?,
-}
+export type PulseGradientOffsetOptions = PulseGradientOffsetTypes.PulseGradientOffsetOptions
+export type LiquidGradientOptions = LiquidGradientTypes.LiquidGradientOptions
+export type FadeGuiObjectOptions = FadeGuiObjectTypes.FadeGuiObjectOptions
+export type PulseUIScaleOptions = PulseUIScaleTypes.PulseUIScaleOptions
 
 return {
-	FadeGuiObjectTypes = FadeGuiObjectTypes,
+	HoverScaleTypes = HoverScaleTypes,
+	SpinTypes = SpinTypes,
 	HoverUIScaleTypes = HoverUIScaleTypes,
-	PulseUIScaleTypes = PulseUIScaleTypes,
+	TweenGuiObjectLayoutTypes = TweenGuiObjectLayoutTypes,
 	SlideFadeCanvasGroupTypes = SlideFadeCanvasGroupTypes,
+	PulseDriverTypes = PulseDriverTypes,
 	SweepGradientKeypointTypes = SweepGradientKeypointTypes,
+	PulseGradientOffsetTypes = PulseGradientOffsetTypes,
+	LiquidGradientTypes = LiquidGradientTypes,
+	FadeGuiObjectTypes = FadeGuiObjectTypes,
+	PulseUIScaleTypes = PulseUIScaleTypes,
 }
