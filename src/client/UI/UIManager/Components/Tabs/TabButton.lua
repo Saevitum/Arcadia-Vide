@@ -120,7 +120,7 @@ local function TabButton<T>(props: TabButtonProps<T>)
 		end,
 
 		BackgroundTransparency = function()
-			return currentStyle().glossBackgroundTransparency or 0
+			return currentStyle().backgroundTransparency or 0
 		end,
 
 		Activated = activate,

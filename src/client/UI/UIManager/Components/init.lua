@@ -13,4 +13,5 @@ return {
 	Header = require(script.Header),
 	Panel = require(script.Panel),
 	ScrollArea = require(script.ScrollArea),
+	Tabs = require(script.Tabs),
 }
