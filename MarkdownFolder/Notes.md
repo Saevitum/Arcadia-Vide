@@ -1,0 +1,1 @@
+Squash effect for the SideKicks : SideKick templateek alapbol kiteritik az egesz Frameet, de ha kijelolsz 1 et, osszemennek es megjelenik az Info frame a jobboldalon.

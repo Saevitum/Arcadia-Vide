@@ -1,0 +1,3 @@
+--!nocheck
+--!nolint
+return {}
