@@ -6,6 +6,7 @@ local Vide = require(ReplicatedStorage.Packages.vide)
 
 local SharedTypes = require(script.Parent.Parent.Parent.UITypes.SharedTypes)
 local MenuTypes = require(script.Parent.Parent.Parent.UITypes.MenuTypes)
+
 local Components = require(script.Parent.Parent.Parent.Components)
 local Effects = require(script.Parent.Parent.Parent.Effects)
 
@@ -25,10 +26,8 @@ export type SelectedSkinInfoProps = {
 	selectedTab: Source<InventoryTabId>,
 	selectedSkin: Source<SkinItem?>,
 	equippedSkinId: Source<string?>,
-
 	accentColor: Source<Color3>,
 	pulsePhase: Source<number>,
-
 	onEquip: ((skin: SkinItem) -> ())?,
 }
 
@@ -120,7 +119,6 @@ local function SelectedSkinInfo(props: SelectedSkinInfoProps)
 
 			openEasingStyle = Enum.EasingStyle.Back,
 			openEasingDirection = Enum.EasingDirection.Out,
-
 			closeEasingStyle = Enum.EasingStyle.Quad,
 			closeEasingDirection = Enum.EasingDirection.Out,
 
@@ -195,7 +193,6 @@ local function SelectedSkinInfo(props: SelectedSkinInfoProps)
 
 				gradient = {
 					rotation = 90,
-
 					transparency = NumberSequence.new({
 						NumberSequenceKeypoint.new(0, 0),
 						NumberSequenceKeypoint.new(0.8, 0.755),
@@ -391,7 +388,6 @@ local function SelectedSkinInfo(props: SelectedSkinInfoProps)
 				strokeThickness = 1.5,
 				hoverScale = 1.08,
 				scaleTextConstraints = true,
-
 				zIndex = 25,
 
 				onClick = function()

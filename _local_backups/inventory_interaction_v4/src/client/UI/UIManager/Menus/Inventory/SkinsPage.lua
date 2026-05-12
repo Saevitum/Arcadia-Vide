@@ -6,6 +6,7 @@ local Vide = require(ReplicatedStorage.Packages.vide)
 
 local SharedTypes = require(script.Parent.Parent.Parent.UITypes.SharedTypes)
 local MenuTypes = require(script.Parent.Parent.Parent.UITypes.MenuTypes)
+
 local Components = require(script.Parent.Parent.Parent.Components)
 local Effects = require(script.Parent.Parent.Parent.Effects)
 local Style = require(script.Parent.Parent.Parent.Style)
@@ -25,46 +26,59 @@ type SkinItem = MenuTypes.SkinItem
 
 export type SkinsPageProps = {
 	selectedTab: Source<InventoryTabId>,
-	selectedSkin: Source<SkinItem?>,
 	selectedSkinId: Source<string?>,
 	equippedSkinId: Source<string?>,
-
+	searchQuery: Source<string>,
 	onSelectSkin: (skin: SkinItem) -> (),
 }
 
 local Tokens = Style.Tokens
 
-local PAGE_FULL_SIZE = UDim2.fromScale(0.7, 0.53)
-local PAGE_FULL_POSITION = UDim2.fromScale(0.5, 0.55)
-
-local PAGE_DETAIL_SIZE = UDim2.fromScale(0.45, 0.53)
-local PAGE_DETAIL_POSITION = UDim2.fromScale(0.35, 0.55)
-
+local PAGE_SIZE = UDim2.fromScale(0.45, 0.53)
+local PAGE_POSITION = UDim2.fromScale(0.35, 0.55)
 local PAGE_ANCHOR = Vector2.new(0.5, 0.5)
 
-local GRID_FULL_CELL_SIZE = UDim2.fromScale(0.1625, 0.305)
-local GRID_DETAIL_CELL_SIZE = UDim2.fromScale(0.29, 0.305)
-local GRID_CELL_PADDING = UDim2.fromScale(0.03, 0.045)
+local function trim(value: string): string
+	return string.gsub(value, "^%s*(.-)%s*$", "%1")
+end
 
-local function hasSelectedSkin(props: SkinsPageProps): boolean
-	return props.selectedSkin() ~= nil
+local function matchesSearch(skin: SkinItem, query: string): boolean
+	local cleanQuery = string.lower(trim(query))
+
+	if cleanQuery == "" then
+		return true
+	end
+
+	local name = string.lower(skin.Name)
+	local rarity = string.lower(skin.Rarity)
+	local description = string.lower(skin.Description)
+
+	return string.find(name, cleanQuery, 1, true) ~= nil
+		or string.find(rarity, cleanQuery, 1, true) ~= nil
+		or string.find(description, cleanQuery, 1, true) ~= nil
 end
 
 local function buildSkinCards(props: SkinsPageProps): { Instance }
 	local children: { Instance } = {}
+	local order = 0
+	local query = props.searchQuery()
 
-	for index, skin in ipairs(MockInventory.SKINS) do
-		table.insert(children, SkinCard({
-			skin = skin,
+	for _, skin in ipairs(MockInventory.SKINS) do
+		if matchesSearch(skin, query) then
+			order += 1
 
-			selectedSkinId = props.selectedSkinId,
-			equippedSkinId = props.equippedSkinId,
-
-			layoutOrder = index,
-			zIndex = 24,
-
-			onSelected = props.onSelectSkin,
-		}))
+			table.insert(
+				children,
+				SkinCard({
+					skin = skin,
+					selectedSkinId = props.selectedSkinId,
+					equippedSkinId = props.equippedSkinId,
+					layoutOrder = order,
+					zIndex = 24,
+					onSelected = props.onSelectSkin,
+				})
+			)
+		end
 	end
 
 	return children
@@ -74,9 +88,9 @@ local function SkinsPage(props: SkinsPageProps)
 	return create("CanvasGroup")({
 		Name = "SkinInventoryPage",
 
-		Size = UDim2.fromScale(1, 1),
-		Position = UDim2.fromScale(0, 0),
-		AnchorPoint = Vector2.new(0, 0),
+		Size = PAGE_SIZE,
+		Position = PAGE_POSITION,
+		AnchorPoint = PAGE_ANCHOR,
 
 		Visible = false,
 		GroupTransparency = 1,
@@ -96,8 +110,8 @@ local function SkinsPage(props: SkinsPageProps)
 				return props.selectedTab() == "Skins"
 			end,
 
-			openPosition = UDim2.fromScale(0, 0),
-			closedPosition = UDim2.fromScale(0, 0),
+			openPosition = PAGE_POSITION,
+			closedPosition = PAGE_POSITION,
 
 			openTransparency = 0,
 			closedTransparency = 1,
@@ -118,9 +132,9 @@ local function SkinsPage(props: SkinsPageProps)
 		ScrollArea({
 			name = "SkinsScrollArea",
 
-			size = PAGE_FULL_SIZE,
-			position = PAGE_FULL_POSITION,
-			anchorPoint = PAGE_ANCHOR,
+			size = UDim2.fromScale(1, 1),
+			position = UDim2.fromScale(0.5, 0.5),
+			anchorPoint = Vector2.new(0.5, 0.5),
 
 			zIndex = 22,
 
@@ -137,69 +151,13 @@ local function SkinsPage(props: SkinsPageProps)
 			},
 
 			grid = {
-				cellSize = function()
-					if hasSelectedSkin(props) then
-						return GRID_DETAIL_CELL_SIZE
-					end
-
-					return GRID_FULL_CELL_SIZE
-				end,
-
-				cellPadding = GRID_CELL_PADDING,
-
+				cellSize = UDim2.fromScale(0.215, 0.305),
+				cellPadding = UDim2.fromScale(0.03, 0.045),
 				fillDirection = Enum.FillDirection.Horizontal,
-				fillDirectionMaxCells = 0,
-
+				fillDirectionMaxCells = 4,
 				horizontalAlignment = Enum.HorizontalAlignment.Left,
 				verticalAlignment = Enum.VerticalAlignment.Top,
-
 				sortOrder = Enum.SortOrder.LayoutOrder,
-			},
-
-			layoutTween = {
-				isOpen = function()
-					return hasSelectedSkin(props)
-				end,
-
-				targetSize = function()
-					if hasSelectedSkin(props) then
-						return PAGE_DETAIL_SIZE
-					end
-
-					return PAGE_FULL_SIZE
-				end,
-
-				targetPosition = function()
-					if hasSelectedSkin(props) then
-						return PAGE_DETAIL_POSITION
-					end
-
-					return PAGE_FULL_POSITION
-				end,
-
-				duration = 0.34,
-
-				openEasingStyle = Enum.EasingStyle.Back,
-				openEasingDirection = Enum.EasingDirection.Out,
-
-				closeEasingStyle = Enum.EasingStyle.Quad,
-				closeEasingDirection = Enum.EasingDirection.Out,
-
-				bounce = {
-					enabled = true,
-					open = true,
-					close = false,
-
-					overshoot = 0.035,
-					firstDuration = 0.22,
-					settleDuration = 0.12,
-
-					firstEasingStyle = Enum.EasingStyle.Quad,
-					firstEasingDirection = Enum.EasingDirection.Out,
-
-					settleEasingStyle = Enum.EasingStyle.Quad,
-					settleEasingDirection = Enum.EasingDirection.Out,
-				},
 			},
 
 			scrollBarThickness = 5,
@@ -210,7 +168,6 @@ local function SkinsPage(props: SkinsPageProps)
 			canvasSize = UDim2.fromOffset(0, 0),
 			syncGridCanvas = true,
 			canvasBottomSafetyScale = 0.08,
-
 			scrollingDirection = Enum.ScrollingDirection.Y,
 
 			children = buildSkinCards(props),

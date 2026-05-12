@@ -6,6 +6,7 @@ local Vide = require(ReplicatedStorage.Packages.vide)
 
 local SharedTypes = require(script.Parent.Parent.Parent.UITypes.SharedTypes)
 local MenuTypes = require(script.Parent.Parent.Parent.UITypes.MenuTypes)
+
 local Components = require(script.Parent.Parent.Parent.Components)
 local Effects = require(script.Parent.Parent.Parent.Effects)
 
@@ -21,14 +22,11 @@ type SkinItem = MenuTypes.SkinItem
 
 export type SkinCardProps = {
 	skin: SkinItem,
-
 	selectedSkinId: Source<string?>,
 	equippedSkinId: Source<string?>,
-
 	layoutOrder: number?,
 	zIndex: number?,
-
-	onSelected: (skin: SkinItem) -> (),
+	onSelected: ((skin: SkinItem) -> ())?,
 }
 
 local EQUIPPED_IMAGE = "rbxassetid://13415241367"
@@ -63,33 +61,38 @@ local function getRarityColor(rarity: string): Color3
 	return Color3.fromRGB(255, 255, 255)
 end
 
-local function isSelected(props: SkinCardProps): boolean
-	return props.selectedSkinId() == props.skin.SkinId
-end
-
-local function isEquipped(props: SkinCardProps): boolean
-	return props.equippedSkinId() == props.skin.SkinId
-end
-
-local function isLocked(props: SkinCardProps): boolean
-	return props.skin.Locked or not props.skin.Owned
-end
-
 local function SkinCard(props: SkinCardProps)
 	local skin = props.skin
 	local rarityColor = getRarityColor(skin.Rarity)
 	local zIndex = props.zIndex or 24
 
+	local function selected(): boolean
+		return props.selectedSkinId() == skin.SkinId
+	end
+
+	local function equipped(): boolean
+		return props.equippedSkinId() == skin.SkinId
+	end
+
+	local function locked(): boolean
+		return skin.Locked or not skin.Owned
+	end
+
 	return create("ImageButton")({
 		Name = `SkinCard_{skin.SkinId}`,
 
 		Image = skin.ImageId,
-		ImageTransparency = 0,
+		ImageTransparency = function()
+			if locked() then
+				return 0.28
+			end
+
+			return 0
+		end,
 		ImageColor3 = Color3.fromRGB(255, 255, 255),
 		ScaleType = Enum.ScaleType.Stretch,
 
 		AutoButtonColor = false,
-
 		Size = UDim2.fromScale(1, 1),
 
 		BackgroundTransparency = 1,
@@ -100,7 +103,9 @@ local function SkinCard(props: SkinCardProps)
 		ZIndex = zIndex,
 
 		Activated = function()
-			props.onSelected(skin)
+			if props.onSelected ~= nil then
+				props.onSelected(skin)
+			end
 		end,
 
 		create("UICorner")({
@@ -111,7 +116,7 @@ local function SkinCard(props: SkinCardProps)
 			Thickness = 2,
 
 			Color = function()
-				if isSelected(props) then
+				if selected() then
 					return Color3.fromRGB(255, 0, 255)
 				end
 
@@ -119,8 +124,12 @@ local function SkinCard(props: SkinCardProps)
 			end,
 
 			Transparency = function()
-				if isSelected(props) then
+				if selected() then
 					return 0
+				end
+
+				if locked() then
+					return 0.35
 				end
 
 				return 0.15
@@ -132,9 +141,11 @@ local function SkinCard(props: SkinCardProps)
 		Image({
 			name = "Selected",
 			image = SELECTED_IMAGE,
+
 			size = UDim2.fromScale(0.8, 0.8),
 			position = UDim2.fromScale(0.5, 0.5),
 			anchorPoint = Vector2.new(0.5, 0.5),
+
 			visible = false,
 			zIndex = zIndex + 1,
 		}),
@@ -142,28 +153,24 @@ local function SkinCard(props: SkinCardProps)
 		Image({
 			name = "Equipped",
 			image = EQUIPPED_IMAGE,
+
 			size = UDim2.fromScale(0.339, 0.289),
 			position = UDim2.fromScale(0, 0),
 			anchorPoint = Vector2.new(0, 0),
 
-			visible = function()
-				return isEquipped(props)
-			end,
-
+			visible = equipped,
 			zIndex = zIndex + 4,
 		}),
 
 		Image({
 			name = "Locked",
 			image = LOCKED_IMAGE,
+
 			size = UDim2.fromScale(0.396, 0.472),
 			position = UDim2.fromScale(0.82, 0.6),
 			anchorPoint = Vector2.new(0.5, 0.5),
 
-			visible = function()
-				return isLocked(props)
-			end,
-
+			visible = locked,
 			zIndex = zIndex + 4,
 		}),
 
@@ -202,6 +209,7 @@ local function SkinCard(props: SkinCardProps)
 			idleScale = 1,
 			hoverScale = 1.06,
 			duration = 0.12,
+			scaleTextConstraints = true,
 		}),
 	})
 end
