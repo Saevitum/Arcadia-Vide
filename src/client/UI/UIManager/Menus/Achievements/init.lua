@@ -3,11 +3,13 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Vide = require(ReplicatedStorage.Packages.vide)
+
 local Types = require(script.Parent.Parent.UITypes.MenuTypes)
 local Components = require(script.Parent.Parent.Components)
-local MockAchievements = require(script.MockAchievements)
+local Tabs = require(script.Parent.Parent.Components.Tabs)
+local Style = require(script.Parent.Parent.Style)
 
-local TabStrip = require(script.TabStrip)
+local MockAchievements = require(script.MockAchievements)
 
 local MoneyPage = require(script.MoneyPage)
 local GemsPage = require(script.GemsPage)
@@ -29,6 +31,9 @@ local Panel = Components.Panel
 
 type AchievementCategory = MockAchievements.AchievementCategory
 
+local TAB_LAYOUT = Style.Tabs.Layouts.FiveByTwo
+local TAB_STYLE = Style.Tabs.Presets.CyberCompact
+
 local function AchievementsMenu(props: Types.AchievementsMenuProps)
 	local selectedTab = source("Money" :: AchievementCategory)
 
@@ -49,8 +54,21 @@ local function AchievementsMenu(props: Types.AchievementsMenuProps)
 			BorderSizePixel = 0,
 			ZIndex = 11,
 
-			TabStrip({
+			Tabs.TabStrip({
+				name = "AchievementsTabStrip",
+
+				tabs = MockAchievements.TABS,
 				selectedTab = selectedTab,
+
+				size = TAB_LAYOUT.size,
+				position = TAB_LAYOUT.position,
+				anchorPoint = TAB_LAYOUT.anchorPoint,
+
+				cellSize = TAB_LAYOUT.cellSize,
+				cellPadding = TAB_LAYOUT.cellPadding,
+				fillDirectionMaxCells = TAB_LAYOUT.fillDirectionMaxCells,
+
+				style = TAB_STYLE,
 				zIndex = 21,
 			}),
 

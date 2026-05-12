@@ -1,5 +1,7 @@
 --!strict
 
+local ComponentTypes = require(script.Parent.Parent.Parent.UITypes.ComponentTypes)
+
 export type AchievementCategory =
 	"Money"
 	| "Gems"
@@ -25,12 +27,7 @@ export type MockAchievement = {
 	State: AchievementState,
 }
 
-export type AchievementTabDefinition = {
-	id: AchievementCategory,
-	label: string,
-	hasAlert: boolean?,
-	layoutOrder: number,
-}
+export type AchievementTabDefinition = ComponentTypes.TabDefinition<AchievementCategory>
 
 local MockAchievements = {}
 

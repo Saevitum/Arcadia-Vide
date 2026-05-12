@@ -10,6 +10,8 @@ export type TabDefinition<T> = {
 	label: string,
 	layoutOrder: number?,
 	disabled: boolean?,
+
+	hasAlert: boolean?,
 }
 
 export type TabPadding = {
