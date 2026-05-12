@@ -38,6 +38,7 @@ export type TabVisualStateStyle = {
 	textTransparency: number?,
 
 	glossColor: Color3?,
+	glossBackgroundTransparency: number?,
 	glossTransparency: NumberSequence?,
 }
 

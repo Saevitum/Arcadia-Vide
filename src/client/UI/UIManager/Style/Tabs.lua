@@ -164,4 +164,210 @@ Tabs.Layouts.FiveByTwo = {
 	fillDirectionMaxCells = 5,
 }
 
+Tabs.Presets.SettingsPink = Tabs.merge(Tabs.Presets.CyberDefault, {
+	cellSize = UDim2.fromScale(0.26, 0.76),
+	cellPadding = UDim2.fromScale(0.035, 0),
+	fillDirectionMaxCells = 3,
+
+	button = {
+		cornerRadius = UDim.new(0.22, 0),
+
+		fontFace = Tokens.Fonts.MichromaBoldItalic,
+		minTextSize = 7,
+		maxTextSize = 18,
+
+		hoverScale = 1.2,
+		hoverDuration = 0.12,
+
+		textStrokeColor = Tokens.Colors.Black,
+		textStrokeTransparency = 0.65,
+		textStrokeThickness = 1,
+
+		default = {
+			backgroundColor = Tokens.Colors.White,
+			backgroundTransparency = 0,
+
+			gradient = Gradients.colorSequence({
+				{
+					time = 0,
+					color = Color3.fromRGB(98, 98, 98),
+				},
+				{
+					time = 0.71,
+					color = Color3.fromRGB(66, 66, 57),
+				},
+				{
+					time = 1,
+					color = Color3.fromRGB(25, 25, 25),
+				},
+			}),
+			gradientRotation = 0,
+
+			strokeColor = Tokens.Colors.White,
+			strokeTransparency = 0.18,
+			strokeThickness = 1,
+
+			strokeGradient = Gradients.colorSequence({
+				{
+					time = 0,
+					color = Color3.fromRGB(74, 168, 255),
+				},
+				{
+					time = 1,
+					color = Color3.fromRGB(30, 30, 30),
+				},
+			}),
+			strokeGradientRotation = 0,
+
+			textColor = Color3.fromRGB(190, 205, 220),
+			textTransparency = 0,
+
+			glossColor = Tokens.Colors.Black,
+			glossBackgroundTransparency = 0.5,
+			glossTransparency = Gradients.glossTransparency(),
+		},
+
+		hover = {
+			backgroundColor = Tokens.Colors.White,
+			backgroundTransparency = 0,
+
+			gradient = Gradients.colorSequence({
+				{
+					time = 0,
+					color = Color3.fromRGB(98, 98, 98),
+				},
+				{
+					time = 0.71,
+					color = Color3.fromRGB(66, 66, 57),
+				},
+				{
+					time = 1,
+					color = Color3.fromRGB(25, 25, 25),
+				},
+			}),
+			gradientRotation = 0,
+
+			strokeColor = Tokens.Colors.White,
+			strokeTransparency = 0.18,
+			strokeThickness = 1,
+
+			strokeGradient = Gradients.colorSequence({
+				{
+					time = 0,
+					color = Color3.fromRGB(74, 168, 255),
+				},
+				{
+					time = 1,
+					color = Color3.fromRGB(30, 30, 30),
+				},
+			}),
+			strokeGradientRotation = 0,
+
+			textColor = Color3.fromRGB(190, 205, 220),
+			textTransparency = 0,
+
+			glossColor = Tokens.Colors.Black,
+			glossBackgroundTransparency = 0.5,
+			glossTransparency = Gradients.glossTransparency(),
+		},
+
+		selected = {
+			backgroundColor = Tokens.Colors.White,
+			backgroundTransparency = 0,
+
+			gradient = Gradients.colorSequence({
+				{
+					time = 0,
+					color = Color3.fromRGB(255, 0, 123),
+				},
+				{
+					time = 0.71,
+					color = Color3.fromRGB(220, 0, 106),
+				},
+				{
+					time = 1,
+					color = Color3.fromRGB(134, 0, 65),
+				},
+			}),
+			gradientRotation = 0,
+
+			strokeColor = Tokens.Colors.White,
+			strokeTransparency = 0,
+			strokeThickness = 2,
+
+			strokeGradient = Gradients.colorSequence({
+				{
+					time = 0,
+					color = Color3.fromRGB(255, 0, 123),
+				},
+				{
+					time = 1,
+					color = Color3.fromRGB(238, 0, 255),
+				},
+			}),
+			strokeGradientRotation = 0,
+
+			textColor = Tokens.Colors.White,
+			textTransparency = 0,
+
+			glossColor = Tokens.Colors.Black,
+			glossBackgroundTransparency = 0.5,
+			glossTransparency = Gradients.glossTransparency(),
+		},
+
+		disabled = {
+			backgroundColor = Tokens.Colors.White,
+			backgroundTransparency = 0,
+
+			gradient = Gradients.colorSequence({
+				{
+					time = 0,
+					color = Color3.fromRGB(98, 98, 98),
+				},
+				{
+					time = 0.71,
+					color = Color3.fromRGB(66, 66, 57),
+				},
+				{
+					time = 1,
+					color = Color3.fromRGB(25, 25, 25),
+				},
+			}),
+			gradientRotation = 0,
+
+			strokeColor = Tokens.Colors.White,
+			strokeTransparency = 0.18,
+			strokeThickness = 1,
+
+			strokeGradient = Gradients.colorSequence({
+				{
+					time = 0,
+					color = Color3.fromRGB(74, 168, 255),
+				},
+				{
+					time = 1,
+					color = Color3.fromRGB(30, 30, 30),
+				},
+			}),
+			strokeGradientRotation = 0,
+
+			textColor = Color3.fromRGB(190, 205, 220),
+			textTransparency = 0.35,
+
+			glossColor = Tokens.Colors.Black,
+			glossBackgroundTransparency = 0.5,
+			glossTransparency = Gradients.glossTransparency(),
+		},
+	},
+}) :: TabStripStyle
+
+Tabs.Layouts.SettingsThree = {
+	size = UDim2.fromScale(0.62, 0.06),
+	position = UDim2.fromScale(0.5, 0.25),
+	anchorPoint = Vector2.new(0.5, 0.5),
+	cellSize = UDim2.fromScale(0.26, 0.76),
+	cellPadding = UDim2.fromScale(0.035, 0),
+	fillDirectionMaxCells = 3,
+}
+
 return Tabs

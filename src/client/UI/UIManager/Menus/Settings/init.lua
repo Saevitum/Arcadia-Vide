@@ -3,11 +3,16 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Vide = require(ReplicatedStorage.Packages.vide)
+
 local Types = require(script.Parent.Parent.UITypes.MenuTypes)
+local SharedTypes = require(script.Parent.Parent.UITypes.SharedTypes)
+local ComponentTypes = require(script.Parent.Parent.UITypes.ComponentTypes)
+
 local Components = require(script.Parent.Parent.Components)
+local Tabs = require(script.Parent.Parent.Components.Tabs)
+local Style = require(script.Parent.Parent.Style)
 
 local GameSettingsPage = require(script.GameSettingsPage)
-local TabStrip = require(script.TabStrip)
 local UserSettingsPage = require(script.UserSettingsPage)
 local VolumeSettingsPage = require(script.VolumeSettingsPage)
 
@@ -18,8 +23,38 @@ local source = Vide.source
 
 local Panel = Components.Panel
 
-type Source<T> = Types.Source<T>
+type Source<T> = SharedTypes.Source<T>
 type SettingsTab = Types.SettingsTab
+type TabDefinition<T> = ComponentTypes.TabDefinition<T>
+
+local SETTINGS_TABS: { TabDefinition<SettingsTab> } = {
+	{
+		id = "Volume",
+		label = "VOLUME",
+		layoutOrder = 1,
+		disabled = false,
+		hasAlert = false,
+	},
+
+	{
+		id = "User",
+		label = "USER",
+		layoutOrder = 2,
+		disabled = false,
+		hasAlert = false,
+	},
+
+	{
+		id = "Game",
+		label = "GAME",
+		layoutOrder = 3,
+		disabled = false,
+		hasAlert = false,
+	},
+}
+
+local TAB_LAYOUT = Style.Tabs.Layouts.SettingsThree
+local TAB_STYLE = Style.Tabs.Presets.SettingsPink
 
 local function SettingsMenu(props: Types.SettingsMenuProps)
 	local selectedTab: Source<SettingsTab> = source("Volume" :: SettingsTab)
@@ -58,8 +93,22 @@ local function SettingsMenu(props: Types.SettingsMenuProps)
 			BorderSizePixel = 0,
 			ZIndex = 11,
 
-			TabStrip({
+			Tabs.TabStrip({
+				name = "SettingsTabStrip",
+
+				tabs = SETTINGS_TABS,
 				selectedTab = selectedTab,
+
+				size = TAB_LAYOUT.size,
+				position = TAB_LAYOUT.position,
+				anchorPoint = TAB_LAYOUT.anchorPoint,
+
+				cellSize = TAB_LAYOUT.cellSize,
+				cellPadding = TAB_LAYOUT.cellPadding,
+				fillDirectionMaxCells = TAB_LAYOUT.fillDirectionMaxCells,
+
+				style = TAB_STYLE,
+				zIndex = 21,
 			}),
 
 			VolumeSettingsPage({

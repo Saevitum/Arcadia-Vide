@@ -120,7 +120,7 @@ local function TabButton<T>(props: TabButtonProps<T>)
 		end,
 
 		BackgroundTransparency = function()
-			return currentStyle().backgroundTransparency or 0
+			return currentStyle().glossBackgroundTransparency or 0
 		end,
 
 		Activated = activate,
@@ -185,12 +185,16 @@ local function TabButton<T>(props: TabButtonProps<T>)
 			Size = UDim2.fromScale(1, 1),
 			Position = UDim2.fromScale(0.5, 0.5),
 			AnchorPoint = Vector2.new(0.5, 0.5),
-			BackgroundTransparency = 0,
-			BorderSizePixel = 0,
 
 			BackgroundColor3 = function()
 				return currentStyle().glossColor or Color3.fromRGB(255, 255, 255)
 			end,
+
+			BackgroundTransparency = function()
+				return currentStyle().glossBackgroundTransparency or 0
+			end,
+
+			BorderSizePixel = 0,
 
 			ZIndex = function()
 				return read(props.zIndex, 1) + 1
