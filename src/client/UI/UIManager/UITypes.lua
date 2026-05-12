@@ -13,7 +13,6 @@ export type MenuId =
 	| "Rewards"
 	| "Settings"
 	| "Shop"
-	| "None"
 
 export type Source<T> = (() -> T) & ((T) -> ())
 export type SettingsTab = "Volume" | "User" | "Game"

@@ -9,4 +9,5 @@ return {
 	RewardsButton = require(script.RewardsButton),
 	SettingsButton = require(script.SettingsButton),
 	ShopButton = require(script.ShopButton),
+	BoostersButton = require(script.BoostersButton),
 }
