@@ -7,6 +7,7 @@ local ImageTypes = require(script.ImageTypes)
 local ScrollAreaTypes = require(script.ScrollAreaTypes)
 local ActionButtonTypes = require(script.ActionButtonTypes)
 local InputTypes = require(script.InputTypes)
+local TabsTypes = require(script.TabsTypes)
 
 export type Source<T> = SharedTypes.Source<T>
 export type Reactive<T> = SharedTypes.Reactive<T>
@@ -42,6 +43,14 @@ export type ToggleSwitchProps = InputTypes.ToggleSwitchProps
 export type ToggleButtonProps = InputTypes.ToggleButtonProps
 export type SliderProps = InputTypes.SliderProps
 
+export type TabDefinition<T> = TabsTypes.TabDefinition<T>
+export type TabPadding = TabsTypes.TabPadding
+export type TabVisualStateStyle = TabsTypes.TabVisualStateStyle
+export type TabButtonStyle = TabsTypes.TabButtonStyle
+export type TabStripStyle = TabsTypes.TabStripStyle
+export type TabButtonProps<T> = TabsTypes.TabButtonProps<T>
+export type TabStripProps<T> = TabsTypes.TabStripProps<T>
+
 return {
 	PanelTypes = PanelTypes,
 	TextTypes = TextTypes,
@@ -49,4 +58,5 @@ return {
 	ScrollAreaTypes = ScrollAreaTypes,
 	ActionButtonTypes = ActionButtonTypes,
 	InputTypes = InputTypes,
+	TabsTypes = TabsTypes,
 }
