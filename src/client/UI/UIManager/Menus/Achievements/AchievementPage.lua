@@ -3,18 +3,21 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Vide = require(ReplicatedStorage.Packages.vide)
-local Types = require(script.Parent.Parent.Parent.UITypes.MenuTypes)
+
+local SharedTypes = require(script.Parent.Parent.Parent.UITypes.SharedTypes)
 local Components = require(script.Parent.Parent.Parent.Components)
 local Effects = require(script.Parent.Parent.Parent.Effects)
+local Style = require(script.Parent.Parent.Parent.Style)
+
 local MockAchievements = require(script.Parent.MockAchievements)
-local Style = require(script.Parent.Style)
 
 Vide.strict = true
 
 local create = Vide.create
+
 local ScrollArea = Components.ScrollArea
 
-type Source<T> = Types.Source<T>
+type Source<T> = SharedTypes.Source<T>
 type AchievementCategory = MockAchievements.AchievementCategory
 
 export type AchievementPageProps = {
@@ -25,19 +28,22 @@ export type AchievementPageProps = {
 	children: { Instance },
 }
 
+local PAGE_LAYOUT = Style.Pages.Layouts.WideLower
+local PAGE_TRANSITION = Style.Pages.Transitions.SoftFade
+local ROW_LAYOUT = Style.Rows.Layouts.WideList
+
 local function AchievementPage(props: AchievementPageProps)
 	return create("CanvasGroup")({
 		Name = `{props.tab}AchievementsPage`,
 
-		Size = Style.PAGE_SIZE,
-		Position = Style.PAGE_POSITION,
-		AnchorPoint = Vector2.new(0.5, 0.5),
+		Size = PAGE_LAYOUT.size,
+		Position = PAGE_LAYOUT.position,
+		AnchorPoint = PAGE_LAYOUT.anchorPoint,
 
 		LayoutOrder = props.layoutOrder,
 
 		Visible = false,
 		GroupTransparency = 1,
-
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
 
@@ -54,20 +60,21 @@ local function AchievementPage(props: AchievementPageProps)
 				return props.selectedTab() == props.tab
 			end,
 
-			openPosition = Style.PAGE_POSITION,
-			closedPosition = Style.PAGE_POSITION,
+			openPosition = PAGE_LAYOUT.position,
+			closedPosition = PAGE_LAYOUT.position,
 
 			openTransparency = 0,
 			closedTransparency = 1,
 
-			duration = Style.PAGE_TRANSITION_DURATION,
-			fadeDuration = Style.PAGE_FADE_DURATION,
-			closeFadeDuration = Style.PAGE_CLOSE_FADE_DURATION,
+			duration = PAGE_TRANSITION.duration,
+			fadeDuration = PAGE_TRANSITION.fadeDuration,
+			closeFadeDuration = PAGE_TRANSITION.closeFadeDuration,
 
-			easingStyle = Enum.EasingStyle.Sine,
-			easingDirection = Enum.EasingDirection.InOut,
-			fadeEasingStyle = Enum.EasingStyle.Sine,
-			fadeEasingDirection = Enum.EasingDirection.InOut,
+			easingStyle = PAGE_TRANSITION.easingStyle,
+			easingDirection = PAGE_TRANSITION.easingDirection,
+
+			fadeEasingStyle = PAGE_TRANSITION.fadeEasingStyle,
+			fadeEasingDirection = PAGE_TRANSITION.fadeEasingDirection,
 
 			hideWhenClosed = true,
 		}),
@@ -94,7 +101,7 @@ local function AchievementPage(props: AchievementPageProps)
 			},
 
 			list = {
-				padding = Style.ROW_PADDING,
+				padding = ROW_LAYOUT.rowPadding,
 				fillDirection = Enum.FillDirection.Vertical,
 				horizontalAlignment = Enum.HorizontalAlignment.Center,
 				verticalAlignment = Enum.VerticalAlignment.Top,
@@ -102,7 +109,7 @@ local function AchievementPage(props: AchievementPageProps)
 			},
 
 			scrollBarThickness = 5,
-			scrollBarImageColor3 = Style.CYAN,
+			scrollBarImageColor3 = Style.Tokens.Colors.CyanBright,
 			scrollBarImageTransparency = 0.2,
 
 			automaticCanvasSize = Enum.AutomaticSize.Y,

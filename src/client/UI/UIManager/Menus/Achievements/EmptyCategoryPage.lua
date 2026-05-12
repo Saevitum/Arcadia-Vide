@@ -3,20 +3,24 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Vide = require(ReplicatedStorage.Packages.vide)
-local Types = require(script.Parent.Parent.Parent.UITypes.MenuTypes)
+
+local SharedTypes = require(script.Parent.Parent.Parent.UITypes.SharedTypes)
 local Components = require(script.Parent.Parent.Parent.Components)
+local Style = require(script.Parent.Parent.Parent.Style)
 
 local MockAchievements = require(script.Parent.MockAchievements)
 local AchievementPage = require(script.Parent.AchievementPage)
-local Style = require(script.Parent.Style)
 
 Vide.strict = true
 
 local create = Vide.create
+
 local Text = Components.Text
 
-type Source<T> = Types.Source<T>
+type Source<T> = SharedTypes.Source<T>
 type AchievementCategory = MockAchievements.AchievementCategory
+
+local EMPTY_STYLE = Style.Pages.EmptyStates.CyberPanel
 
 local function EmptyCategoryPage(
 	tab: AchievementCategory,
@@ -34,30 +38,28 @@ local function EmptyCategoryPage(
 			create("Frame")({
 				Name = `{tab}EmptyState`,
 
-				Size = UDim2.fromScale(0.96, 0.35),
-				BackgroundColor3 = Color3.fromRGB(8, 12, 20),
-				BackgroundTransparency = 0.35,
+				Size = EMPTY_STYLE.size,
+
+				BackgroundColor3 = EMPTY_STYLE.backgroundColor,
+				BackgroundTransparency = EMPTY_STYLE.backgroundTransparency,
 				BorderSizePixel = 0,
 
 				LayoutOrder = 1,
 				ZIndex = 24,
 
 				create("UICorner")({
-					CornerRadius = UDim.new(0.08, 0),
+					CornerRadius = EMPTY_STYLE.cornerRadius,
 				}),
 
 				create("UIStroke")({
-					Thickness = 1.25,
-					Color = Style.WHITE,
-					Transparency = 0.35,
+					Thickness = EMPTY_STYLE.strokeThickness,
+					Color = EMPTY_STYLE.strokeColor,
+					Transparency = EMPTY_STYLE.strokeTransparency,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
 
 					create("UIGradient")({
-						Rotation = 0,
-						Color = ColorSequence.new({
-							ColorSequenceKeypoint.new(0, Style.CYAN),
-							ColorSequenceKeypoint.new(1, Style.MAGENTA),
-						}),
+						Rotation = EMPTY_STYLE.strokeGradientRotation,
+						Color = EMPTY_STYLE.strokeGradient,
 					}),
 				}),
 
@@ -65,21 +67,21 @@ local function EmptyCategoryPage(
 					name = "EmptyText",
 					text = `{label} achievements are not added yet.`,
 
-					size = UDim2.fromScale(0.82, 0.45),
-					position = UDim2.fromScale(0.5, 0.5),
-					anchorPoint = Vector2.new(0.5, 0.5),
+					size = EMPTY_STYLE.textSize,
+					position = EMPTY_STYLE.textPosition,
+					anchorPoint = EMPTY_STYLE.textAnchorPoint,
 
-					fontFace = Style.FONT_BOLD_ITALIC,
+					fontFace = EMPTY_STYLE.fontFace,
 					textScaled = true,
-					minTextSize = 8,
-					maxTextSize = 22,
+					minTextSize = EMPTY_STYLE.minTextSize,
+					maxTextSize = EMPTY_STYLE.maxTextSize,
 
-					textColor3 = Style.EMPTY_TEXT_COLOR,
+					textColor3 = EMPTY_STYLE.textColor,
 
 					stroke = {
-						thickness = 1,
-						color = Color3.fromRGB(0, 0, 0),
-						transparency = 0.2,
+						thickness = EMPTY_STYLE.textStrokeThickness,
+						color = EMPTY_STYLE.textStrokeColor,
+						transparency = EMPTY_STYLE.textStrokeTransparency,
 					},
 
 					zIndex = 25,

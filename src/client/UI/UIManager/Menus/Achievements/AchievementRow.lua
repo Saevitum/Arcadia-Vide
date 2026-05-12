@@ -3,10 +3,12 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Vide = require(ReplicatedStorage.Packages.vide)
+
 local Components = require(script.Parent.Parent.Parent.Components)
 local Effects = require(script.Parent.Parent.Parent.Effects)
+local Style = require(script.Parent.Parent.Parent.Style)
+
 local MockAchievements = require(script.Parent.MockAchievements)
-local Style = require(script.Parent.Style)
 
 Vide.strict = true
 
@@ -23,6 +25,10 @@ export type AchievementRowProps = {
 	onCollect: ((achievement: MockAchievement) -> ())?,
 }
 
+local Tokens = Style.Tokens
+local ROW_LAYOUT = Style.Rows.Layouts.WideList
+local ROW_STYLE = Style.Rows.Presets.SegmentedCyber
+
 local function getStateText(state: MockAchievements.AchievementState): string
 	if state == "Available" then
 		return "Collect"
@@ -37,14 +43,14 @@ end
 
 local function getStatusColor(state: MockAchievements.AchievementState): Color3
 	if state == "Available" then
-		return Color3.fromRGB(82, 230, 35)
+		return ROW_STYLE.collectColor
 	end
 
 	if state == "Claimed" then
-		return Color3.fromRGB(70, 86, 94)
+		return ROW_STYLE.claimedColor
 	end
 
-	return Color3.fromRGB(35, 42, 54)
+	return ROW_STYLE.lockedColor
 end
 
 local function Segment(props: {
@@ -61,25 +67,20 @@ local function Segment(props: {
 		Position = props.position,
 		AnchorPoint = props.anchorPoint,
 
-		BackgroundColor3 = Color3.fromRGB(25, 34, 45),
-		BackgroundTransparency = 0.12,
+		BackgroundColor3 = ROW_STYLE.segmentBackgroundColor,
+		BackgroundTransparency = ROW_STYLE.segmentBackgroundTransparency,
 		BorderSizePixel = 0,
+
 		ZIndex = props.zIndex,
 
 		create("UICorner")({
-			CornerRadius = UDim.new(0.16, 0),
+			CornerRadius = ROW_STYLE.segmentCornerRadius,
 		}),
 
 		create("UIGradient")({
 			Rotation = 0,
-			Color = ColorSequence.new({
-				ColorSequenceKeypoint.new(0, Color3.fromRGB(30, 42, 55)),
-				ColorSequenceKeypoint.new(1, Color3.fromRGB(11, 15, 23)),
-			}),
-			Transparency = NumberSequence.new({
-				NumberSequenceKeypoint.new(0, 0.12),
-				NumberSequenceKeypoint.new(1, 0.3),
-			}),
+			Color = ROW_STYLE.segmentGradient,
+			Transparency = ROW_STYLE.segmentTransparency,
 		}),
 	})
 end
@@ -92,30 +93,23 @@ local function AchievementRow(props: AchievementRowProps)
 	return create("Frame")({
 		Name = `AchievementRow_{achievement.Id}`,
 
-		Size = Style.ROW_SIZE,
-		BackgroundColor3 = Color3.fromRGB(15, 21, 30),
-		BackgroundTransparency = 0.12,
+		Size = ROW_LAYOUT.rowSize,
+
+		BackgroundColor3 = ROW_STYLE.rowBackgroundColor,
+		BackgroundTransparency = ROW_STYLE.rowBackgroundTransparency,
 		BorderSizePixel = 0,
 
 		LayoutOrder = props.layoutOrder or 0,
 		ZIndex = zIndex,
 
 		create("UICorner")({
-			CornerRadius = UDim.new(0.2, 0),
+			CornerRadius = ROW_STYLE.rowCornerRadius,
 		}),
 
 		create("UIGradient")({
 			Rotation = 0,
-			Color = ColorSequence.new({
-				ColorSequenceKeypoint.new(0, Color3.fromRGB(24, 33, 43)),
-				ColorSequenceKeypoint.new(0.55, Color3.fromRGB(12, 17, 25)),
-				ColorSequenceKeypoint.new(1, Color3.fromRGB(24, 33, 43)),
-			}),
-			Transparency = NumberSequence.new({
-				NumberSequenceKeypoint.new(0, 0.18),
-				NumberSequenceKeypoint.new(0.5, 0.03),
-				NumberSequenceKeypoint.new(1, 0.18),
-			}),
+			Color = ROW_STYLE.rowGradient,
+			Transparency = ROW_STYLE.rowTransparency,
 		}),
 
 		Segment({
@@ -150,16 +144,16 @@ local function AchievementRow(props: AchievementRowProps)
 			position = UDim2.fromScale(0.12, 0.5),
 			anchorPoint = Vector2.new(0.5, 0.5),
 
-			fontFace = Style.FONT_BOLD_ITALIC,
+			fontFace = ROW_STYLE.fontFace,
 			textScaled = true,
 			minTextSize = 6,
 			maxTextSize = 16,
 
-			textColor3 = Style.CYAN,
+			textColor3 = ROW_STYLE.titleColor,
 
 			stroke = {
-				thickness = 1,
-				color = Color3.fromRGB(0, 0, 0),
+				thickness = ROW_STYLE.textStrokeThickness,
+				color = ROW_STYLE.textStrokeColor,
 				transparency = 0.12,
 			},
 
@@ -174,17 +168,17 @@ local function AchievementRow(props: AchievementRowProps)
 			position = UDim2.fromScale(0.39, 0.5),
 			anchorPoint = Vector2.new(0.5, 0.5),
 
-			fontFace = Style.FONT_BOLD_ITALIC,
+			fontFace = ROW_STYLE.fontFace,
 			textScaled = true,
 			minTextSize = 6,
 			maxTextSize = 15,
 
-			textColor3 = Color3.fromRGB(235, 240, 245),
+			textColor3 = ROW_STYLE.textColor,
 
 			stroke = {
-				thickness = 1,
-				color = Color3.fromRGB(0, 0, 0),
-				transparency = 0.16,
+				thickness = ROW_STYLE.textStrokeThickness,
+				color = ROW_STYLE.textStrokeColor,
+				transparency = ROW_STYLE.textStrokeTransparency,
 			},
 
 			zIndex = zIndex + 2,
@@ -198,17 +192,17 @@ local function AchievementRow(props: AchievementRowProps)
 			position = UDim2.fromScale(0.66, 0.5),
 			anchorPoint = Vector2.new(0.5, 0.5),
 
-			fontFace = Style.FONT_BOLD_ITALIC,
+			fontFace = ROW_STYLE.fontFace,
 			textScaled = true,
 			minTextSize = 6,
 			maxTextSize = 15,
 
-			textColor3 = Color3.fromRGB(235, 240, 245),
+			textColor3 = ROW_STYLE.textColor,
 
 			stroke = {
-				thickness = 1,
-				color = Color3.fromRGB(0, 0, 0),
-				transparency = 0.16,
+				thickness = ROW_STYLE.textStrokeThickness,
+				color = ROW_STYLE.textStrokeColor,
+				transparency = ROW_STYLE.textStrokeTransparency,
 			},
 
 			zIndex = zIndex + 2,
@@ -228,6 +222,7 @@ local function AchievementRow(props: AchievementRowProps)
 				BackgroundColor3 = getStatusColor(achievement.State),
 				BackgroundTransparency = 0,
 				BorderSizePixel = 0,
+
 				ZIndex = zIndex + 3,
 
 				Activated = function()
@@ -241,14 +236,15 @@ local function AchievementRow(props: AchievementRowProps)
 				}),
 
 				create("UIStroke")({
-					Thickness = 1.25,
-					Color = Color3.fromRGB(190, 255, 170),
+					Thickness = Tokens.Strokes.Thin,
+					Color = ROW_STYLE.collectStrokeColor,
 					Transparency = 0.08,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
 				}),
 
 				create("UIGradient")({
 					Rotation = 90,
+
 					Color = ColorSequence.new({
 						ColorSequenceKeypoint.new(0, Color3.fromRGB(160, 255, 100)),
 						ColorSequenceKeypoint.new(1, Color3.fromRGB(48, 175, 28)),
@@ -263,16 +259,16 @@ local function AchievementRow(props: AchievementRowProps)
 					position = UDim2.fromScale(0.5, 0.5),
 					anchorPoint = Vector2.new(0.5, 0.5),
 
-					fontFace = Style.FONT_BOLD_ITALIC,
+					fontFace = ROW_STYLE.fontFace,
 					textScaled = true,
 					minTextSize = 6,
 					maxTextSize = 18,
 
-					textColor3 = Style.WHITE,
+					textColor3 = Tokens.Colors.White,
 
 					stroke = {
 						thickness = 1,
-						color = Color3.fromRGB(0, 0, 0),
+						color = Tokens.Colors.Black,
 						transparency = 0.1,
 					},
 
@@ -283,7 +279,7 @@ local function AchievementRow(props: AchievementRowProps)
 					idleScale = 1,
 					hoverScale = 1.08,
 					scaleTextConstraints = true,
-					duration = 0.12,
+					duration = Tokens.Timing.Hover,
 				}),
 			})
 			else create("Frame")({
@@ -296,6 +292,7 @@ local function AchievementRow(props: AchievementRowProps)
 				BackgroundColor3 = getStatusColor(achievement.State),
 				BackgroundTransparency = 0.18,
 				BorderSizePixel = 0,
+
 				ZIndex = zIndex + 3,
 
 				create("UICorner")({
@@ -310,16 +307,16 @@ local function AchievementRow(props: AchievementRowProps)
 					position = UDim2.fromScale(0.5, 0.5),
 					anchorPoint = Vector2.new(0.5, 0.5),
 
-					fontFace = Style.FONT_BOLD_ITALIC,
+					fontFace = ROW_STYLE.fontFace,
 					textScaled = true,
 					minTextSize = 6,
 					maxTextSize = 16,
 
-					textColor3 = Color3.fromRGB(235, 240, 245),
+					textColor3 = ROW_STYLE.textColor,
 
 					stroke = {
-						thickness = 1,
-						color = Color3.fromRGB(0, 0, 0),
+						thickness = ROW_STYLE.textStrokeThickness,
+						color = ROW_STYLE.textStrokeColor,
 						transparency = 0.12,
 					},
 
