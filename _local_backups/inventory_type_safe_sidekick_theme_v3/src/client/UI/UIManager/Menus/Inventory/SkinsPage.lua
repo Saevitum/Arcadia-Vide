@@ -6,7 +6,6 @@ local Vide = require(ReplicatedStorage.Packages.vide)
 
 local SharedTypes = require(script.Parent.Parent.Parent.UITypes.SharedTypes)
 local MenuTypes = require(script.Parent.Parent.Parent.UITypes.MenuTypes)
-
 local Components = require(script.Parent.Parent.Parent.Components)
 local Effects = require(script.Parent.Parent.Parent.Effects)
 local Style = require(script.Parent.Parent.Parent.Style)
@@ -20,15 +19,15 @@ local create = Vide.create
 
 local ScrollArea = Components.ScrollArea
 
-type Source<T> = SharedTypes.Source<T>
+type Source = SharedTypes.Source
 type InventoryTabId = MenuTypes.InventoryTabId
 type SkinItem = MenuTypes.SkinItem
 
 export type SkinsPageProps = {
-	selectedTab: Source<InventoryTabId>,
-	selectedSkinId: Source<string?>,
-	equippedSkinId: Source<string?>,
-	searchQuery: Source<string>,
+	selectedTab: Source,
+	selectedSkinId: Source,
+	equippedSkinId: Source,
+	searchQuery: Source,
 	onSelectSkin: (skin: SkinItem) -> (),
 }
 
@@ -86,7 +85,7 @@ end
 
 local function SkinsPage(props: SkinsPageProps)
 	return create("CanvasGroup")({
-		Name = "SkinInventoryPage",
+		Name = "SkinsInventoryPage",
 
 		Size = PAGE_SIZE,
 		Position = PAGE_POSITION,
@@ -151,7 +150,7 @@ local function SkinsPage(props: SkinsPageProps)
 			},
 
 			grid = {
-				cellSize = UDim2.fromScale(0.215, 0.305),
+				cellSize = UDim2.fromScale(0.205, 0.34),
 				cellPadding = UDim2.fromScale(0.03, 0.045),
 				fillDirection = Enum.FillDirection.Horizontal,
 				fillDirectionMaxCells = 4,

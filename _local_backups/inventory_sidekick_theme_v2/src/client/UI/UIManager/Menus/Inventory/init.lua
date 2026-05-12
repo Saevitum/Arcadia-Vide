@@ -31,28 +31,20 @@ type Source<T> = SharedTypes.Source<T>
 type InventoryTabId = Types.InventoryTabId
 type SkinItem = Types.SkinItem
 
+local TAB_LAYOUT = Style.Tabs.Layouts.ThreeTop
 local TAB_STYLE = Style.Tabs.Presets.CyberThreeTabs
 
-local TAB_STRIP_SIZE = UDim2.fromScale(0.42, 0.06)
-local TAB_STRIP_POSITION = UDim2.fromScale(0.5, 0.23)
-
-local SEARCH_SIZE = UDim2.fromScale(0.25, 0.045)
-local SEARCH_POSITION = UDim2.fromScale(0.735, 0.23)
-
-local DIVIDER_SIZE = UDim2.fromScale(0.004, 0.5)
-local DIVIDER_POSITION = UDim2.fromScale(0.605, 0.55)
+local SEARCH_SIZE = UDim2.fromScale(0.25, 0.055)
+local SEARCH_POSITION = UDim2.fromScale(0.73, 0.275)
 
 local function InventoryMenu(props: Types.InventoryMenuProps)
 	local selectedTab: Source<InventoryTabId> = source("Skins" :: InventoryTabId)
 
-	local defaultSkin: SkinItem? = MockInventory.getDefaultSkin()
+	local defaultSkin = MockInventory.getDefaultSkin()
 	local selectedSkin: Source<SkinItem?> = source(defaultSkin)
 	local selectedSkinId: Source<string?> = source(if defaultSkin ~= nil then defaultSkin.SkinId else nil)
 	local equippedSkinId: Source<string?> = source(MockInventory.getDefaultEquippedSkinId())
 	local searchQuery: Source<string> = source("")
-
-	local pulsePhase: Source<number> = source(0)
-	local accentColor: Source<Color3> = source(Style.Tokens.Colors.CyanBright)
 
 	local function selectSkin(skin: SkinItem)
 		selectedSkin(skin)
@@ -84,34 +76,19 @@ local function InventoryMenu(props: Types.InventoryMenuProps)
 			BorderSizePixel = 0,
 			ZIndex = 11,
 
-			create("Frame")({
-				Name = "PulseDriverHost",
-
-				Size = UDim2.fromScale(0, 0),
-				BackgroundTransparency = 1,
-				Visible = false,
-
-				Effects.PulseDriver({
-					phase = pulsePhase,
-					duration = 3.6,
-					easingStyle = Enum.EasingStyle.Sine,
-					easingDirection = Enum.EasingDirection.InOut,
-				}),
-			}),
-
 			Tabs.TabStrip({
 				name = "InventoryTabStrip",
 
-				tabs = MockInventory.TABS :: any,
+				tabs = MockInventory.TABS,
 				selectedTab = selectedTab,
 
-				size = TAB_STRIP_SIZE,
-				position = TAB_STRIP_POSITION,
-				anchorPoint = Vector2.new(0.5, 0.5),
+				size = TAB_LAYOUT.size,
+				position = TAB_LAYOUT.position,
+				anchorPoint = TAB_LAYOUT.anchorPoint,
 
-				cellSize = UDim2.fromScale(0.3, 0.7),
-				cellPadding = UDim2.fromScale(0.035, 0),
-				fillDirectionMaxCells = 3,
+				cellSize = TAB_LAYOUT.cellSize,
+				cellPadding = TAB_LAYOUT.cellPadding,
+				fillDirectionMaxCells = TAB_LAYOUT.fillDirectionMaxCells,
 
 				style = TAB_STYLE,
 				zIndex = 21,
@@ -142,6 +119,7 @@ local function InventoryMenu(props: Types.InventoryMenuProps)
 				BackgroundColor3 = Style.Tokens.Colors.DarkGlass,
 				BackgroundTransparency = 0.08,
 				BorderSizePixel = 0,
+
 				ZIndex = 23,
 
 				action(function(instance: Instance)
@@ -190,8 +168,8 @@ local function InventoryMenu(props: Types.InventoryMenuProps)
 			create("Frame")({
 				Name = "InventoryDivider",
 
-				Size = DIVIDER_SIZE,
-				Position = DIVIDER_POSITION,
+				Size = UDim2.fromScale(0.003, 0.52),
+				Position = UDim2.fromScale(0.59, 0.565),
 				AnchorPoint = Vector2.new(0.5, 0.5),
 
 				BackgroundColor3 = Style.Tokens.Colors.White,
@@ -217,21 +195,16 @@ local function InventoryMenu(props: Types.InventoryMenuProps)
 					Transparency = Style.Gradients.edgeFadeTransparency(),
 
 					Effects.SweepGradientKeypoint({
-						phase = pulsePhase,
 						edgeColor = Style.Tokens.Colors.White,
 						middleColors = {
 							Style.Tokens.Colors.CyanBright,
 							Style.Tokens.Colors.Magenta,
 							Style.Tokens.Colors.Red,
 						},
-						loopsPerColor = 1,
 						edgeTransparency = 1,
 						middleTransparency = 0,
+						duration = 1.2,
 						colorTweenDuration = 0.22,
-
-						onColorChanged = function(color: Color3)
-							accentColor(color)
-						end,
 					}),
 				}),
 			}),
@@ -248,8 +221,6 @@ local function InventoryMenu(props: Types.InventoryMenuProps)
 				selectedTab = selectedTab,
 				selectedSkin = selectedSkin,
 				equippedSkinId = equippedSkinId,
-				accentColor = accentColor,
-				pulsePhase = pulsePhase,
 				onEquip = equipSkin,
 			}),
 

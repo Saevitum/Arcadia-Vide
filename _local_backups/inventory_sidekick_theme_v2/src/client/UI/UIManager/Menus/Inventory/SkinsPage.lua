@@ -6,7 +6,6 @@ local Vide = require(ReplicatedStorage.Packages.vide)
 
 local SharedTypes = require(script.Parent.Parent.Parent.UITypes.SharedTypes)
 local MenuTypes = require(script.Parent.Parent.Parent.UITypes.MenuTypes)
-
 local Components = require(script.Parent.Parent.Parent.Components)
 local Effects = require(script.Parent.Parent.Parent.Effects)
 local Style = require(script.Parent.Parent.Parent.Style)
@@ -29,13 +28,14 @@ export type SkinsPageProps = {
 	selectedSkinId: Source<string?>,
 	equippedSkinId: Source<string?>,
 	searchQuery: Source<string>,
+
 	onSelectSkin: (skin: SkinItem) -> (),
 }
 
 local Tokens = Style.Tokens
 
-local PAGE_SIZE = UDim2.fromScale(0.45, 0.53)
-local PAGE_POSITION = UDim2.fromScale(0.35, 0.55)
+local PAGE_SIZE = UDim2.fromScale(0.5, 0.56)
+local PAGE_POSITION = UDim2.fromScale(0.36, 0.565)
 local PAGE_ANCHOR = Vector2.new(0.5, 0.5)
 
 local function trim(value: string): string
@@ -86,7 +86,7 @@ end
 
 local function SkinsPage(props: SkinsPageProps)
 	return create("CanvasGroup")({
-		Name = "SkinInventoryPage",
+		Name = "SkinsInventoryPage",
 
 		Size = PAGE_SIZE,
 		Position = PAGE_POSITION,
@@ -151,7 +151,7 @@ local function SkinsPage(props: SkinsPageProps)
 			},
 
 			grid = {
-				cellSize = UDim2.fromScale(0.215, 0.305),
+				cellSize = UDim2.fromScale(0.205, 0.34),
 				cellPadding = UDim2.fromScale(0.03, 0.045),
 				fillDirection = Enum.FillDirection.Horizontal,
 				fillDirectionMaxCells = 4,

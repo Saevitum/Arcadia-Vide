@@ -6,13 +6,13 @@ local Vide = require(ReplicatedStorage.Packages.vide)
 
 local Types = require(script.Parent.Parent.UITypes.MenuTypes)
 local SharedTypes = require(script.Parent.Parent.UITypes.SharedTypes)
-
 local Components = require(script.Parent.Parent.Components)
 local Tabs = require(script.Parent.Parent.Components.Tabs)
 local Effects = require(script.Parent.Parent.Effects)
 local Style = require(script.Parent.Parent.Style)
 
 local MockInventory = require(script.MockInventory)
+
 local SkinsPage = require(script.SkinsPage)
 local RanksPage = require(script.RanksPage)
 local QuestsPage = require(script.QuestsPage)
@@ -27,7 +27,7 @@ local cleanup = Vide.cleanup
 
 local Panel = Components.Panel
 
-type Source<T> = SharedTypes.Source<T>
+type Source = SharedTypes.Source
 type InventoryTabId = Types.InventoryTabId
 type SkinItem = Types.SkinItem
 
@@ -35,24 +35,27 @@ local TAB_STYLE = Style.Tabs.Presets.CyberThreeTabs
 
 local TAB_STRIP_SIZE = UDim2.fromScale(0.42, 0.06)
 local TAB_STRIP_POSITION = UDim2.fromScale(0.5, 0.23)
+local TAB_BUTTON_SIZE = UDim2.fromScale(0.3, 0.78)
+local TAB_BUTTON_PADDING = UDim2.fromScale(0.035, 0)
 
-local SEARCH_SIZE = UDim2.fromScale(0.25, 0.045)
-local SEARCH_POSITION = UDim2.fromScale(0.735, 0.23)
+local SEARCH_SIZE = UDim2.fromScale(0.25, 0.055)
+local SEARCH_POSITION = UDim2.fromScale(0.73, 0.23)
 
 local DIVIDER_SIZE = UDim2.fromScale(0.004, 0.5)
-local DIVIDER_POSITION = UDim2.fromScale(0.605, 0.55)
+local DIVIDER_POSITION = UDim2.fromScale(0.6, 0.55)
 
 local function InventoryMenu(props: Types.InventoryMenuProps)
-	local selectedTab: Source<InventoryTabId> = source("Skins" :: InventoryTabId)
+	local selectedTab: Source = source("Skins" :: InventoryTabId)
 
-	local defaultSkin: SkinItem? = MockInventory.getDefaultSkin()
-	local selectedSkin: Source<SkinItem?> = source(defaultSkin)
-	local selectedSkinId: Source<string?> = source(if defaultSkin ~= nil then defaultSkin.SkinId else nil)
-	local equippedSkinId: Source<string?> = source(MockInventory.getDefaultEquippedSkinId())
-	local searchQuery: Source<string> = source("")
+	local defaultSkin = MockInventory.getDefaultSkin()
 
-	local pulsePhase: Source<number> = source(0)
-	local accentColor: Source<Color3> = source(Style.Tokens.Colors.CyanBright)
+	local selectedSkin: Source = source(defaultSkin)
+	local selectedSkinId: Source = source(if defaultSkin ~= nil then defaultSkin.SkinId else nil)
+	local equippedSkinId: Source = source(MockInventory.getDefaultEquippedSkinId())
+	local searchQuery: Source = source("")
+
+	local dividerColor: Source = source(Style.Tokens.Colors.CyanBright)
+	local pulsePhase: Source = source(0)
 
 	local function selectSkin(skin: SkinItem)
 		selectedSkin(skin)
@@ -85,7 +88,7 @@ local function InventoryMenu(props: Types.InventoryMenuProps)
 			ZIndex = 11,
 
 			create("Frame")({
-				Name = "PulseDriverHost",
+				Name = "InventoryPulseDriverHost",
 
 				Size = UDim2.fromScale(0, 0),
 				BackgroundTransparency = 1,
@@ -102,15 +105,15 @@ local function InventoryMenu(props: Types.InventoryMenuProps)
 			Tabs.TabStrip({
 				name = "InventoryTabStrip",
 
-				tabs = MockInventory.TABS :: any,
+				tabs = MockInventory.TABS,
 				selectedTab = selectedTab,
 
 				size = TAB_STRIP_SIZE,
 				position = TAB_STRIP_POSITION,
 				anchorPoint = Vector2.new(0.5, 0.5),
 
-				cellSize = UDim2.fromScale(0.3, 0.7),
-				cellPadding = UDim2.fromScale(0.035, 0),
+				cellSize = TAB_BUTTON_SIZE,
+				cellPadding = TAB_BUTTON_PADDING,
 				fillDirectionMaxCells = 3,
 
 				style = TAB_STYLE,
@@ -142,6 +145,7 @@ local function InventoryMenu(props: Types.InventoryMenuProps)
 				BackgroundColor3 = Style.Tokens.Colors.DarkGlass,
 				BackgroundTransparency = 0.08,
 				BorderSizePixel = 0,
+
 				ZIndex = 23,
 
 				action(function(instance: Instance)
@@ -217,20 +221,23 @@ local function InventoryMenu(props: Types.InventoryMenuProps)
 					Transparency = Style.Gradients.edgeFadeTransparency(),
 
 					Effects.SweepGradientKeypoint({
-						phase = pulsePhase,
 						edgeColor = Style.Tokens.Colors.White,
+
 						middleColors = {
 							Style.Tokens.Colors.CyanBright,
 							Style.Tokens.Colors.Magenta,
 							Style.Tokens.Colors.Red,
 						},
-						loopsPerColor = 1,
+
 						edgeTransparency = 1,
 						middleTransparency = 0,
+
+						phase = pulsePhase,
+						loopsPerColor = 1,
 						colorTweenDuration = 0.22,
 
 						onColorChanged = function(color: Color3)
-							accentColor(color)
+							dividerColor(color)
 						end,
 					}),
 				}),
@@ -248,7 +255,7 @@ local function InventoryMenu(props: Types.InventoryMenuProps)
 				selectedTab = selectedTab,
 				selectedSkin = selectedSkin,
 				equippedSkinId = equippedSkinId,
-				accentColor = accentColor,
+				accentColor = dividerColor,
 				pulsePhase = pulsePhase,
 				onEquip = equipSkin,
 			}),

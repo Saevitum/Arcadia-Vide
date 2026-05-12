@@ -6,9 +6,9 @@ local Vide = require(ReplicatedStorage.Packages.vide)
 
 local SharedTypes = require(script.Parent.Parent.Parent.UITypes.SharedTypes)
 local MenuTypes = require(script.Parent.Parent.Parent.UITypes.MenuTypes)
-
 local Components = require(script.Parent.Parent.Parent.Components)
 local Effects = require(script.Parent.Parent.Parent.Effects)
+local Style = require(script.Parent.Parent.Parent.Style)
 
 Vide.strict = true
 
@@ -18,18 +18,32 @@ local Text = Components.Text
 local Image = Components.Image
 local ActionButton = Components.ActionButton
 
-type Source<T> = SharedTypes.Source<T>
-type InventoryTabId = MenuTypes.InventoryTabId
+type Source = SharedTypes.Source
 type SkinItem = MenuTypes.SkinItem
 
 export type SelectedSkinInfoProps = {
-	selectedTab: Source<InventoryTabId>,
-	selectedSkin: Source<SkinItem?>,
-	equippedSkinId: Source<string?>,
-	accentColor: Source<Color3>,
-	pulsePhase: Source<number>,
+	selectedTab: Source,
+	selectedSkin: Source,
+	equippedSkinId: Source,
+	accentColor: () -> Color3,
+	pulsePhase: (() -> number)?,
 	onEquip: ((skin: SkinItem) -> ())?,
 }
+
+local LOCK_IMAGE = "rbxassetid://13414458532"
+local RENAME_IMAGE = "rbxassetid://13414468097"
+
+local FONT_BOLD = Font.new(
+	"rbxasset://fonts/families/Michroma.json",
+	Enum.FontWeight.Bold,
+	Enum.FontStyle.Normal
+)
+
+local FONT_BOLD_ITALIC = Font.new(
+	"rbxasset://fonts/families/Michroma.json",
+	Enum.FontWeight.Bold,
+	Enum.FontStyle.Italic
+)
 
 local INFO_SIZE = UDim2.fromScale(0.22, 0.52)
 local INFO_OPEN_POSITION = UDim2.fromScale(0.735, 0.55)
@@ -39,11 +53,7 @@ local function getSelected(props: SelectedSkinInfoProps): SkinItem?
 	return props.selectedSkin()
 end
 
-local function getSelectedText(
-	props: SelectedSkinInfoProps,
-	selector: (SkinItem) -> string,
-	fallback: string
-): string
+local function getSelectedText(props: SelectedSkinInfoProps, selector: (SkinItem) -> string, fallback: string): string
 	local selected = getSelected(props)
 
 	if selected == nil then
@@ -85,9 +95,47 @@ local function getStatusText(skin: SkinItem?, equippedSkinId: string?): string
 	return "Owned"
 end
 
+local function IconButton(props: {
+	name: string,
+	image: string,
+	size: UDim2,
+	position: UDim2,
+	anchorPoint: Vector2,
+	zIndex: number,
+	onClick: (() -> ())?,
+})
+	return create("ImageButton")({
+		Name = props.name,
+		Image = props.image,
+		ImageColor3 = Color3.fromRGB(255, 255, 255),
+		ImageTransparency = 0,
+		ScaleType = Enum.ScaleType.Fit,
+		AutoButtonColor = false,
+
+		Size = props.size,
+		Position = props.position,
+		AnchorPoint = props.anchorPoint,
+
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+
+		ZIndex = props.zIndex,
+
+		Activated = function()
+			if props.onClick ~= nil then
+				props.onClick()
+			end
+		end,
+
+		create("UICorner")({
+			CornerRadius = UDim.new(0.15, 0),
+		}),
+	})
+end
+
 local function SelectedSkinInfo(props: SelectedSkinInfoProps)
 	local function open(): boolean
-		return props.selectedTab() == "Skins" and props.selectedSkin() ~= nil
+		return props.selectedTab() == "Skins" and getSelected(props) ~= nil
 	end
 
 	return create("CanvasGroup")({
@@ -99,6 +147,7 @@ local function SelectedSkinInfo(props: SelectedSkinInfoProps)
 
 		Visible = false,
 		GroupTransparency = 1,
+
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
 
@@ -119,6 +168,7 @@ local function SelectedSkinInfo(props: SelectedSkinInfoProps)
 
 			openEasingStyle = Enum.EasingStyle.Back,
 			openEasingDirection = Enum.EasingDirection.Out,
+
 			closeEasingStyle = Enum.EasingStyle.Quad,
 			closeEasingDirection = Enum.EasingDirection.Out,
 
@@ -193,12 +243,35 @@ local function SelectedSkinInfo(props: SelectedSkinInfoProps)
 
 				gradient = {
 					rotation = 90,
+
 					transparency = NumberSequence.new({
 						NumberSequenceKeypoint.new(0, 0),
 						NumberSequenceKeypoint.new(0.8, 0.755),
 						NumberSequenceKeypoint.new(1, 1),
 					}),
 				},
+			}),
+
+			IconButton({
+				name = "Lock",
+				image = LOCK_IMAGE,
+
+				size = UDim2.fromScale(0.185, 0.193),
+				position = UDim2.fromScale(0.149, 0.13),
+				anchorPoint = Vector2.new(0.5, 0.5),
+
+				zIndex = 26,
+			}),
+
+			IconButton({
+				name = "Rename",
+				image = RENAME_IMAGE,
+
+				size = UDim2.fromScale(0.185, 0.193),
+				position = UDim2.fromScale(0.877, 0.124),
+				anchorPoint = Vector2.new(0.5, 0.5),
+
+				zIndex = 26,
 			}),
 		}),
 
@@ -215,12 +288,7 @@ local function SelectedSkinInfo(props: SelectedSkinInfoProps)
 			position = UDim2.fromScale(0.5, 0.55),
 			anchorPoint = Vector2.new(0.5, 0.5),
 
-			fontFace = Font.new(
-				"rbxasset://fonts/families/Michroma.json",
-				Enum.FontWeight.Bold,
-				Enum.FontStyle.Normal
-			),
-
+			fontFace = FONT_BOLD,
 			textScaled = true,
 			minTextSize = 7,
 			maxTextSize = 16,
@@ -235,7 +303,7 @@ local function SelectedSkinInfo(props: SelectedSkinInfoProps)
 				transparency = 0.35,
 			},
 
-			zIndex = 25,
+			zIndex = 27,
 		}),
 
 		Text({
@@ -251,6 +319,7 @@ local function SelectedSkinInfo(props: SelectedSkinInfoProps)
 			position = UDim2.fromScale(0.5, 0.62),
 			anchorPoint = Vector2.new(0.5, 0.5),
 
+			fontFace = FONT_BOLD_ITALIC,
 			textScaled = true,
 			minTextSize = 6,
 			maxTextSize = 14,
@@ -265,143 +334,121 @@ local function SelectedSkinInfo(props: SelectedSkinInfoProps)
 				transparency = 0.2,
 			},
 
-			zIndex = 25,
+			zIndex = 27,
 		}),
 
-		create("Frame")({
-			Name = "SelectedSkinDetails",
+		Text({
+			name = "Description",
 
-			Size = UDim2.fromScale(1, 0.5),
-			Position = UDim2.fromScale(0.5, 0.75),
-			AnchorPoint = Vector2.new(0.5, 0.5),
+			text = function()
+				return getSelectedText(props, function(skin)
+					return skin.Description
+				end, "")
+			end,
 
-			BackgroundTransparency = 1,
-			BorderSizePixel = 0,
+			size = UDim2.fromScale(0.82, 0.16),
+			position = UDim2.fromScale(0.5, 0.73),
+			anchorPoint = Vector2.new(0.5, 0.5),
 
-			ZIndex = 24,
+			fontFace = Font.new(
+				"rbxasset://fonts/families/Michroma.json",
+				Enum.FontWeight.Regular,
+				Enum.FontStyle.Normal
+			),
 
-			Text({
-				name = "Status",
+			textScaled = true,
+			textWrapped = true,
+			minTextSize = 6,
+			maxTextSize = 12,
 
-				text = function()
-					return getStatusText(props.selectedSkin(), props.equippedSkinId())
-				end,
+			textColor3 = Color3.fromRGB(255, 255, 255),
+			textXAlignment = Enum.TextXAlignment.Center,
+			textYAlignment = Enum.TextYAlignment.Center,
 
-				size = UDim2.fromScale(0.84, 0.12),
-				position = UDim2.fromScale(0.5, 0.2),
-				anchorPoint = Vector2.new(0.5, 0.5),
+			stroke = {
+				thickness = 1,
+				color = Color3.fromRGB(0, 0, 0),
+				transparency = 0.35,
+			},
 
-				fontFace = Font.new(
-					"rbxasset://fonts/families/Michroma.json",
-					Enum.FontWeight.Bold,
-					Enum.FontStyle.Normal
-				),
+			zIndex = 27,
+		}),
 
-				textScaled = true,
-				minTextSize = 6,
-				maxTextSize = 12,
+		Text({
+			name = "Status",
 
-				textColor3 = Color3.fromRGB(0, 255, 238),
-				textXAlignment = Enum.TextXAlignment.Center,
-				textYAlignment = Enum.TextYAlignment.Center,
+			text = function()
+				return getStatusText(getSelected(props), props.equippedSkinId())
+			end,
 
-				stroke = {
-					thickness = 1,
-					color = Color3.fromRGB(0, 0, 0),
-					transparency = 0.3,
-				},
+			size = UDim2.fromScale(0.82, 0.055),
+			position = UDim2.fromScale(0.5, 0.84),
+			anchorPoint = Vector2.new(0.5, 0.5),
 
-				zIndex = 25,
-			}),
+			fontFace = FONT_BOLD,
+			textScaled = true,
+			minTextSize = 6,
+			maxTextSize = 12,
 
-			Text({
-				name = "Description",
+			textColor3 = Color3.fromRGB(0, 255, 238),
 
-				text = function()
-					return getSelectedText(props, function(skin)
-						return skin.Description
-					end, "")
-				end,
+			stroke = {
+				thickness = 1,
+				color = Color3.fromRGB(0, 0, 0),
+				transparency = 0.3,
+			},
 
-				size = UDim2.fromScale(0.84, 0.26),
-				position = UDim2.fromScale(0.5, 0.43),
-				anchorPoint = Vector2.new(0.5, 0.5),
+			zIndex = 27,
+		}),
 
-				fontFace = Font.new(
-					"rbxasset://fonts/families/Michroma.json",
-					Enum.FontWeight.Regular,
-					Enum.FontStyle.Normal
-				),
+		ActionButton({
+			name = "EquipButton",
 
-				textScaled = true,
-				textWrapped = true,
-				minTextSize = 6,
-				maxTextSize = 12,
+			text = function()
+				return getButtonText(getSelected(props), props.equippedSkinId())
+			end,
 
-				textColor3 = Color3.fromRGB(220, 230, 235),
-				textXAlignment = Enum.TextXAlignment.Center,
-				textYAlignment = Enum.TextYAlignment.Center,
+			size = UDim2.fromScale(0.72, 0.07),
+			position = UDim2.fromScale(0.5, 0.925),
+			anchorPoint = Vector2.new(0.5, 0.5),
 
-				stroke = {
-					thickness = 1,
-					color = Color3.fromRGB(0, 0, 0),
-					transparency = 0.35,
-				},
+			variant = function()
+				local skin = getSelected(props)
 
-				zIndex = 25,
-			}),
+				if skin == nil or skin.Locked or not skin.Owned then
+					return "Disabled"
+				end
 
-			ActionButton({
-				name = "EquipButton",
+				if props.equippedSkinId() == skin.SkinId then
+					return "Blue"
+				end
 
-				text = function()
-					return getButtonText(props.selectedSkin(), props.equippedSkinId())
-				end,
+				return "Green"
+			end,
 
-				size = UDim2.fromScale(0.72, 0.13),
-				position = UDim2.fromScale(0.5, 0.82),
-				anchorPoint = Vector2.new(0.5, 0.5),
+			disabled = function()
+				local skin = getSelected(props)
 
-				variant = function()
-					local skin = props.selectedSkin()
+				return skin == nil or skin.Locked or not skin.Owned or props.equippedSkinId() == skin.SkinId
+			end,
 
-					if skin == nil or skin.Locked or not skin.Owned then
-						return "Disabled"
-					end
+			strokeThickness = 1.5,
+			hoverScale = 1.08,
+			scaleTextConstraints = true,
 
-					if props.equippedSkinId() == skin.SkinId then
-						return "Blue"
-					end
+			zIndex = 27,
 
-					return "Green"
-				end,
+			onClick = function()
+				local skin = getSelected(props)
 
-				disabled = function()
-					local skin = props.selectedSkin()
+				if skin == nil or skin.Locked or not skin.Owned then
+					return
+				end
 
-					return skin == nil
-						or skin.Locked
-						or not skin.Owned
-						or props.equippedSkinId() == skin.SkinId
-				end,
-
-				strokeThickness = 1.5,
-				hoverScale = 1.08,
-				scaleTextConstraints = true,
-				zIndex = 25,
-
-				onClick = function()
-					local skin = props.selectedSkin()
-
-					if skin == nil or skin.Locked or not skin.Owned then
-						return
-					end
-
-					if props.onEquip ~= nil then
-						props.onEquip(skin)
-					end
-				end,
-			}),
+				if props.onEquip ~= nil then
+					props.onEquip(skin)
+				end
+			end,
 		}),
 	})
 end

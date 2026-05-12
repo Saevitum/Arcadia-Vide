@@ -6,7 +6,6 @@ local Vide = require(ReplicatedStorage.Packages.vide)
 
 local SharedTypes = require(script.Parent.Parent.Parent.UITypes.SharedTypes)
 local MenuTypes = require(script.Parent.Parent.Parent.UITypes.MenuTypes)
-
 local Components = require(script.Parent.Parent.Parent.Components)
 local Effects = require(script.Parent.Parent.Parent.Effects)
 
@@ -17,13 +16,13 @@ local create = Vide.create
 local Text = Components.Text
 local Image = Components.Image
 
-type Source<T> = SharedTypes.Source<T>
+type Source = SharedTypes.Source
 type SkinItem = MenuTypes.SkinItem
 
 export type SkinCardProps = {
 	skin: SkinItem,
-	selectedSkinId: Source<string?>,
-	equippedSkinId: Source<string?>,
+	selectedSkinId: Source,
+	equippedSkinId: Source,
 	layoutOrder: number?,
 	zIndex: number?,
 	onSelected: ((skin: SkinItem) -> ())?,
@@ -32,6 +31,12 @@ export type SkinCardProps = {
 local EQUIPPED_IMAGE = "rbxassetid://13415241367"
 local LOCKED_IMAGE = "rbxassetid://14608383463"
 local SELECTED_IMAGE = "rbxassetid://13415286900"
+
+local FONT_BOLD_ITALIC = Font.new(
+	"rbxasset://fonts/families/Michroma.json",
+	Enum.FontWeight.Bold,
+	Enum.FontStyle.Italic
+)
 
 local function getRarityColor(rarity: string): Color3
 	if rarity == "Common" then
@@ -82,17 +87,12 @@ local function SkinCard(props: SkinCardProps)
 		Name = `SkinCard_{skin.SkinId}`,
 
 		Image = skin.ImageId,
-		ImageTransparency = function()
-			if locked() then
-				return 0.28
-			end
-
-			return 0
-		end,
+		ImageTransparency = 0,
 		ImageColor3 = Color3.fromRGB(255, 255, 255),
 		ScaleType = Enum.ScaleType.Stretch,
 
 		AutoButtonColor = false,
+
 		Size = UDim2.fromScale(1, 1),
 
 		BackgroundTransparency = 1,
@@ -126,10 +126,6 @@ local function SkinCard(props: SkinCardProps)
 			Transparency = function()
 				if selected() then
 					return 0
-				end
-
-				if locked() then
-					return 0.35
 				end
 
 				return 0.15
@@ -182,12 +178,7 @@ local function SkinCard(props: SkinCardProps)
 			position = UDim2.fromScale(0.5, 0.9),
 			anchorPoint = Vector2.new(0.5, 0.5),
 
-			fontFace = Font.new(
-				"rbxasset://fonts/families/Michroma.json",
-				Enum.FontWeight.Bold,
-				Enum.FontStyle.Italic
-			),
-
+			fontFace = FONT_BOLD_ITALIC,
 			textScaled = true,
 			minTextSize = 7,
 			maxTextSize = 16,
@@ -209,7 +200,6 @@ local function SkinCard(props: SkinCardProps)
 			idleScale = 1,
 			hoverScale = 1.06,
 			duration = 0.12,
-			scaleTextConstraints = true,
 		}),
 	})
 end
