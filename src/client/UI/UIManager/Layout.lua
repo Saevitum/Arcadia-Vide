@@ -1,7 +1,7 @@
 --!strict
 
 local Device = require(script.Parent.Device)
-local Types = require(script.Parent.UITypes.DeviceTypes)
+local LayoutTypes = require(script.Parent.UITypes.LayoutTypes)
 
 local Layout = {}
 
@@ -37,7 +37,7 @@ function Layout.GetExitButtonSize(): UDim2
 	return UDim2.fromScale(0.144, 0.239)
 end
 
-function Layout.GetGridCellSize(options: Types.GridCellSizeOptions): UDim2
+function Layout.GetGridCellSize(options: LayoutTypes.GridCellSizeOptions): UDim2
 	local columns = math.max(1, math.floor(options.columns))
 	local rowsVisible = math.max(1, options.rowsVisible or 2)
 
