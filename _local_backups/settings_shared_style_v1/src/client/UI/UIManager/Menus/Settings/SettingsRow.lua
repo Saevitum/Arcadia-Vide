@@ -3,8 +3,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Vide = require(ReplicatedStorage.Packages.vide)
-
-local Style = require(script.Parent.Parent.Parent.Style)
+local Style = require(script.Parent.Style)
 
 Vide.strict = true
 
@@ -19,42 +18,37 @@ export type SettingsRowProps = {
 	children: { Instance },
 }
 
-local SETTINGS = Style.Controls.Settings
-local COLORS = SETTINGS.Colors
-local ROW = SETTINGS.Row
-
 local function SettingsRow(props: SettingsRowProps)
 	return create("Frame")({
 		Name = props.name,
-
 		Size = props.size,
 		LayoutOrder = props.layoutOrder,
 
 		BackgroundColor3 = function()
 			if props.dimmed ~= nil and props.dimmed() then
-				return COLORS.DimmedRow
+				return Color3.fromRGB(13, 17, 25)
 			end
 
-			return COLORS.DarkAlt
+			return Style.DARK_ALT
 		end,
 
 		BackgroundTransparency = function()
 			if props.dimmed ~= nil and props.dimmed() then
-				return ROW.dimmedBackgroundTransparency
+				return 0.2
 			end
 
-			return ROW.backgroundTransparency
+			return 0.08
 		end,
 
 		BorderSizePixel = 0,
 		ZIndex = props.zIndex,
 
 		create("UICorner")({
-			CornerRadius = ROW.cornerRadius,
+			CornerRadius = UDim.new(0.18, 0),
 		}),
 
-		Style.Decorators.RowGradient(),
-		Style.Decorators.NeonStroke(ROW.strokeThickness, ROW.strokeTransparency),
+		Style.RowGradient(),
+		Style.NeonStroke(2, 0.05),
 
 		props.children,
 	})

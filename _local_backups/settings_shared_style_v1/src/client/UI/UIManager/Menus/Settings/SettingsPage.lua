@@ -3,21 +3,17 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Vide = require(ReplicatedStorage.Packages.vide)
-
-local SharedTypes = require(script.Parent.Parent.Parent.UITypes.SharedTypes)
 local Types = require(script.Parent.Parent.Parent.UITypes.MenuTypes)
-
 local Components = require(script.Parent.Parent.Parent.Components)
 local Effects = require(script.Parent.Parent.Parent.Effects)
-local Style = require(script.Parent.Parent.Parent.Style)
+local Style = require(script.Parent.Style)
 
 Vide.strict = true
 
 local create = Vide.create
-
 local ScrollArea = Components.ScrollArea
 
-type Source<T> = SharedTypes.Source<T>
+type Source<T> = Types.Source<T>
 type SettingsTab = Types.SettingsTab
 
 export type SettingsPageProps = {
@@ -28,25 +24,20 @@ export type SettingsPageProps = {
 	children: { Instance },
 }
 
-local PAGE_LAYOUT = Style.Pages.Layouts.SettingsMain
-local PAGE_TRANSITION = Style.Pages.Transitions.SettingsSoft
-local SETTINGS_COLORS = Style.Controls.Settings.Colors
-
 local function SettingsPage(props: SettingsPageProps)
 	return create("CanvasGroup")({
 		Name = `{props.tab}Page`,
 
-		Size = PAGE_LAYOUT.size,
-		Position = PAGE_LAYOUT.position,
-		AnchorPoint = PAGE_LAYOUT.anchorPoint,
-
+		Size = Style.PAGE_SIZE,
+		Position = Style.PAGE_POSITION,
+		AnchorPoint = Vector2.new(0.5, 0.5),
 		LayoutOrder = props.layoutOrder,
 
 		Visible = false,
 		GroupTransparency = 1,
+
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
-
 		ZIndex = function()
 			if props.selectedTab() == props.tab then
 				return props.zIndex + 1
@@ -60,28 +51,26 @@ local function SettingsPage(props: SettingsPageProps)
 				return props.selectedTab() == props.tab
 			end,
 
-			openPosition = PAGE_LAYOUT.position,
-			closedPosition = PAGE_LAYOUT.position,
+			openPosition = Style.PAGE_POSITION,
+			closedPosition = Style.PAGE_POSITION,
 
 			openTransparency = 0,
 			closedTransparency = 1,
 
-			duration = PAGE_TRANSITION.duration,
-			fadeDuration = PAGE_TRANSITION.fadeDuration,
-			closeFadeDuration = PAGE_TRANSITION.closeFadeDuration,
+			duration = Style.PAGE_TRANSITION_DURATION,
+			fadeDuration = Style.PAGE_FADE_DURATION,
+			closeFadeDuration = Style.PAGE_CLOSE_FADE_DURATION,
 
-			easingStyle = PAGE_TRANSITION.easingStyle,
-			easingDirection = PAGE_TRANSITION.easingDirection,
-
-			fadeEasingStyle = PAGE_TRANSITION.fadeEasingStyle,
-			fadeEasingDirection = PAGE_TRANSITION.fadeEasingDirection,
+			easingStyle = Enum.EasingStyle.Sine,
+			easingDirection = Enum.EasingDirection.InOut,
+			fadeEasingStyle = Enum.EasingStyle.Sine,
+			fadeEasingDirection = Enum.EasingDirection.InOut,
 
 			hideWhenClosed = true,
 		}),
 
 		ScrollArea({
 			name = `{props.tab}ScrollArea`,
-
 			size = UDim2.fromScale(1, 1),
 			position = UDim2.fromScale(0.5, 0.5),
 			anchorPoint = Vector2.new(0.5, 0.5),
@@ -92,14 +81,12 @@ local function SettingsPage(props: SettingsPageProps)
 			backgroundColor3 = Color3.fromRGB(0, 0, 0),
 
 			layoutKind = "List",
-
 			padding = {
 				top = UDim.new(0.035, 0),
 				bottom = UDim.new(0.05, 0),
 				left = UDim.new(0.02, 0),
 				right = UDim.new(0.02, 0),
 			},
-
 			list = {
 				padding = UDim.new(0.035, 0),
 				fillDirection = Enum.FillDirection.Vertical,
@@ -109,9 +96,8 @@ local function SettingsPage(props: SettingsPageProps)
 			},
 
 			scrollBarThickness = 6,
-			scrollBarImageColor3 = SETTINGS_COLORS.Cyan,
+			scrollBarImageColor3 = Style.CYAN,
 			scrollBarImageTransparency = 0.15,
-
 			automaticCanvasSize = Enum.AutomaticSize.Y,
 			canvasSize = UDim2.fromScale(0, 0),
 			scrollingDirection = Enum.ScrollingDirection.Y,

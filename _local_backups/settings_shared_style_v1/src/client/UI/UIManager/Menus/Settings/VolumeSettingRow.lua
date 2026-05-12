@@ -1,18 +1,16 @@
 --!strict
 
-local SharedTypes = require(script.Parent.Parent.Parent.UITypes.SharedTypes)
-
+local Types = require(script.Parent.Parent.Parent.UITypes.MenuTypes)
 local Components = require(script.Parent.Parent.Parent.Components)
-local Style = require(script.Parent.Parent.Parent.Style)
-
 local NumberInput = require(script.Parent.NumberInput)
 local SettingsRow = require(script.Parent.SettingsRow)
+local Style = require(script.Parent.Style)
 
 local Text = Components.Text
 local Slider = Components.Slider
 local ToggleButton = Components.ToggleButton
 
-type Source<T> = SharedTypes.Source<T>
+type Source<T> = Types.Source<T>
 
 export type VolumeSettingRowProps = {
 	name: string,
@@ -24,16 +22,11 @@ export type VolumeSettingRowProps = {
 	zIndex: number,
 }
 
-local SETTINGS = Style.Controls.Settings
-local COLORS = SETTINGS.Colors
-local FONTS = SETTINGS.Fonts
-local LAYOUT = SETTINGS.Layouts.VolumeRow
-
 local function VolumeSettingRow(props: VolumeSettingRowProps)
 	return SettingsRow({
 		name = props.name,
 		layoutOrder = props.layoutOrder,
-		size = LAYOUT.rowSize,
+		size = Style.VOLUME_SETTING_ROW_SIZE,
 		zIndex = props.zIndex,
 		dimmed = props.muted,
 
@@ -42,16 +35,16 @@ local function VolumeSettingRow(props: VolumeSettingRowProps)
 				name = "Label",
 				text = props.label,
 
-				size = LAYOUT.labelSize,
-				position = LAYOUT.labelPosition,
+				size = Style.VOLUME_LABEL_SIZE,
+				position = Style.VOLUME_LABEL_POSITION,
 				anchorPoint = Vector2.new(0.5, 0.5),
 
-				fontFace = FONTS.BoldItalic,
+				fontFace = Style.FONT_BOLD_ITALIC,
 				textScaled = true,
 				minTextSize = 8,
 				maxTextSize = 22,
 
-				textColor3 = COLORS.Cyan,
+				textColor3 = Style.CYAN,
 				textXAlignment = Enum.TextXAlignment.Left,
 				textYAlignment = Enum.TextYAlignment.Center,
 
@@ -68,16 +61,16 @@ local function VolumeSettingRow(props: VolumeSettingRowProps)
 				name = "Description",
 				text = props.description,
 
-				size = LAYOUT.descriptionSize,
-				position = LAYOUT.descriptionPosition,
+				size = Style.VOLUME_DESCRIPTION_SIZE,
+				position = Style.VOLUME_DESCRIPTION_POSITION,
 				anchorPoint = Vector2.new(0.5, 0.5),
 
-				fontFace = FONTS.BoldItalic,
+				fontFace = Style.FONT_BOLD_ITALIC,
 				textScaled = true,
 				minTextSize = 7,
 				maxTextSize = 16,
 
-				textColor3 = COLORS.Pink,
+				textColor3 = Style.PINK,
 				textXAlignment = Enum.TextXAlignment.Left,
 				textYAlignment = Enum.TextYAlignment.Center,
 
@@ -93,89 +86,71 @@ local function VolumeSettingRow(props: VolumeSettingRowProps)
 			ToggleButton({
 				name = "MuteToggle",
 				value = props.muted,
-
-				size = LAYOUT.toggleButtonSize,
-				position = LAYOUT.toggleButtonPosition,
+				size = Style.VOLUME_TOGGLE_SIZE,
+				position = Style.VOLUME_TOGGLE_POSITION,
 				anchorPoint = Vector2.new(0.5, 0.5),
-
 				zIndex = props.zIndex + 1,
-
 				textOn = "OFF",
 				textOff = "ON",
-
-				fontFace = FONTS.Bold,
-				textColor3 = COLORS.ToggleText,
-				onTextColor3 = COLORS.ToggleOnText,
-
-				strokeColor3 = COLORS.Cyan,
-				onStrokeColor3 = COLORS.Pink,
+				fontFace = Style.FONT_BOLD,
+				textColor3 = Color3.fromRGB(5, 22, 25),
+				onTextColor3 = Color3.fromRGB(35, 8, 22),
+				strokeColor3 = Style.CYAN,
+				onStrokeColor3 = Style.PINK,
 				strokeThickness = 2,
 				strokeTransparency = 0.02,
-
 				cornerRadius = UDim.new(0.16, 0),
-
 				minTextSize = 7,
 				maxTextSize = 13,
 			}),
 
 			Slider({
 				name = "VolumeSlider",
-
 				value = props.value,
 				min = 0,
 				max = 100,
 				step = 1,
 				dimmed = props.muted,
-
-				size = LAYOUT.sliderSize,
-				position = LAYOUT.sliderPosition,
+				size = Style.VOLUME_SLIDER_SIZE,
+				position = Style.VOLUME_SLIDER_POSITION,
 				anchorPoint = Vector2.new(0.5, 0.5),
-
 				zIndex = props.zIndex + 1,
-
-				backgroundColor3 = COLORS.Dark,
-
+				backgroundColor3 = Style.DARK,
 				fillColor3 = function()
 					if props.muted() then
-						return COLORS.DimmedSliderFill
+						return Style.DIMMED_SLIDER_FILL
 					end
 
-					return COLORS.White
+					return Style.WHITE
 				end,
-
 				fillGradient = function()
 					if props.muted() then
-						return ColorSequence.new(COLORS.DimmedSliderFill)
+						return ColorSequence.new(Style.DIMMED_SLIDER_FILL)
 					end
 
 					return ColorSequence.new({
-						ColorSequenceKeypoint.new(0, COLORS.Cyan),
-						ColorSequenceKeypoint.new(1, COLORS.Magenta),
+						ColorSequenceKeypoint.new(0, Style.CYAN),
+						ColorSequenceKeypoint.new(1, Style.MAGENTA),
 					})
 				end,
-
 				fillGradientEffect = {
 					enabled = function()
 						return not props.muted()
 					end,
-
 					duration = 4.2,
-					primaryColor = COLORS.Cyan,
-					secondaryColor = COLORS.Magenta,
-					disabledColor = COLORS.DimmedSliderFill,
+					primaryColor = Style.CYAN,
+					secondaryColor = Style.MAGENTA,
+					disabledColor = Style.DIMMED_SLIDER_FILL,
 				},
-
-				knobColor3 = COLORS.White,
-				dimmedKnobColor3 = COLORS.DimmedKnob,
-
+				knobColor3 = Style.WHITE,
+				dimmedKnobColor3 = Style.DIMMED_KNOB,
 				strokeColor3 = function()
 					if props.muted() then
-						return COLORS.DimmedSliderFill
+						return Style.DIMMED_SLIDER_FILL
 					end
 
-					return COLORS.Cyan
+					return Style.CYAN
 				end,
-
 				strokeThickness = 1,
 				strokeTransparency = 0.12,
 				dimmedFillTransparency = 0.08,
@@ -183,13 +158,10 @@ local function VolumeSettingRow(props: VolumeSettingRowProps)
 
 			NumberInput({
 				name = "PercentInput",
-
 				value = props.value,
 				muted = props.muted,
-
-				size = LAYOUT.inputSize,
-				position = LAYOUT.inputPosition,
-
+				size = Style.VOLUME_INPUT_SIZE,
+				position = Style.VOLUME_INPUT_POSITION,
 				zIndex = props.zIndex + 1,
 			}),
 		},

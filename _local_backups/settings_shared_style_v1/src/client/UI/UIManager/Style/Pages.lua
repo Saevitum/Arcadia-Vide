@@ -11,12 +11,6 @@ Pages.Layouts = {
 		position = UDim2.fromScale(0.5, 0.58),
 		anchorPoint = Vector2.new(0.5, 0.5),
 	},
-
-	SettingsMain = {
-		size = UDim2.fromScale(0.76, 0.58),
-		position = UDim2.fromScale(0.5, 0.575),
-		anchorPoint = Vector2.new(0.5, 0.5),
-	},
 }
 
 Pages.Transitions = {
@@ -24,18 +18,6 @@ Pages.Transitions = {
 		duration = 0.28,
 		fadeDuration = 0.2,
 		closeFadeDuration = 0.12,
-
-		easingStyle = Enum.EasingStyle.Sine,
-		easingDirection = Enum.EasingDirection.InOut,
-
-		fadeEasingStyle = Enum.EasingStyle.Sine,
-		fadeEasingDirection = Enum.EasingDirection.InOut,
-	},
-
-	SettingsSoft = {
-		duration = 0.42,
-		fadeDuration = 0.42,
-		closeFadeDuration = 0.34,
 
 		easingStyle = Enum.EasingStyle.Sine,
 		easingDirection = Enum.EasingDirection.InOut,
