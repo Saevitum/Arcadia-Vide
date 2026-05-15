@@ -43,7 +43,7 @@ local PAGE_DETAIL_POSITION = UDim2.fromScale(0.35, 0.55)
 local PAGE_ANCHOR = Vector2.new(0.5, 0.5)
 
 local GRID_FULL_CELL_SIZE = UDim2.fromScale(0.1625, 0.305)
-local GRID_DETAIL_CELL_SIZE = UDim2.fromScale(0.1625, 0.28)
+local GRID_DETAIL_CELL_SIZE = UDim2.fromScale(0.29, 0.305)
 local GRID_CELL_PADDING = UDim2.fromScale(0.03, 0.045)
 
 local function hasSelectedSkin(props: SkinsPageProps): boolean

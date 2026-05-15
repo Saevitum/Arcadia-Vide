@@ -51,12 +51,6 @@ local function InventoryMenu(props: Types.InventoryMenuProps)
 	end
 
 	local function selectSkin(skin: SkinItem)
-		if selectedSkinId() == skin.SkinId then
-			selectedSkin(nil)
-			selectedSkinId(nil)
-			return
-		end
-
 		selectedSkin(skin)
 		selectedSkinId(skin.SkinId)
 	end

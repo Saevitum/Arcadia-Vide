@@ -175,11 +175,7 @@ local function SkinCard(props: SkinCardProps)
 			position = UDim2.fromScale(0.5, 0.9),
 			anchorPoint = Vector2.new(0.5, 0.5),
 
-			fontFace = Font.new(
-				"rbxasset://fonts/families/Michroma.json",
-				Enum.FontWeight.Bold,
-				Enum.FontStyle.Italic
-			),
+			fontFace = Font.new("rbxasset://fonts/families/Michroma.json", Enum.FontWeight.Bold, Enum.FontStyle.Italic),
 
 			textScaled = true,
 			minTextSize = 7,
