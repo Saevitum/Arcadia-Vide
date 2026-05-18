@@ -37,7 +37,7 @@ local SCROLL_ANCHOR_POINT = Vector2.new(0.5, 0.5)
 
 -- COMPONENTS
 local Panel = Components.Panel
-local ScrollArea = Components.ScrollArea local AnimatedPulseDivider = Components.AnimatedPulseDivider
+local ScrollArea = Components.ScrollArea
 
 local function SideKickMenu(props: Types.SideKickMenuProps)
 	local selectedSideKickId = source(nil :: string?)
@@ -205,27 +205,7 @@ local function SideKickMenu(props: Types.SideKickMenuProps)
 				children = cards,
 			}),
 
-			AnimatedPulseDivider({
-				name = "SideKickDivider",
-				open = function()
-					return selectedSideKick() ~= nil
-				end,
-				phase = pulsePhase,
-				size = UDim2.fromScale(0.0015, 0.5),
-				position = UDim2.fromScale(0.639, 0.49),
-				anchorPoint = Vector2.new(0.5, 0.5),
-				zIndex = 16,
-				backgroundColor3 = Color3.fromRGB(255, 255, 255),
-				edgeColor = Color3.fromRGB(255, 255, 255),
-				middleColors = {
-					Color3.fromRGB(0, 229, 255),
-					Color3.fromRGB(255, 0, 255),
-					Color3.fromRGB(255, 0, 60),
-				},
-				onColorChanged = function(color: Color3)
-					dividerColor(color)
-				end,
-			}), ({
+			create("Frame")({
 				Name = "SideKickDivider",
 
 				Size = UDim2.fromScale(0.0015, 0.5),

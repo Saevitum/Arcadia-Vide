@@ -1,7 +1,7 @@
 --!strict
 
 return {
-	ActionButton = require(script.ActionButton), AnimatedInfoStroke = require(script.AnimatedInfoStroke), AnimatedPulseDivider = require(script.AnimatedPulseDivider),
+	ActionButton = require(script.ActionButton), AnimatedInfoStroke = require(script.AnimatedInfoStroke),
 	Text = require(script.Text),
 	Image = require(script.Image),
 	Slider = require(script.Slider),
