@@ -16,15 +16,14 @@ local action = Vide.action
 local cleanup = Vide.cleanup
 local effect = Vide.effect
 
-type TabButtonProps = Types.TabButtonProps<string>
+type TabButtonProps = Types.TabButtonProps
 type TabButtonStyle = Types.TabButtonStyle
 type TabVisualStateStyle = Types.TabVisualStateStyle
-type Source<T> = Types.Source<T>
-type Reactive<T> = Types.Reactive<T>
+type Reactive = Types.Reactive
 
 local DEFAULT_BUTTON_STYLE: TabButtonStyle = Style.Tabs.Presets.CyberDefault.button :: TabButtonStyle
 
-local function readReactive<T>(value: Reactive<T>?, fallback: T): T
+local function readReactive<T>(value: Reactive?, fallback: T): T
 	if value == nil then
 		return fallback
 	end
@@ -51,21 +50,21 @@ end
 local function getStateStyle(
 	props: TabButtonProps,
 	buttonStyle: TabButtonStyle,
-	hovered: Source<boolean>
+	hovered: Types.Source
 ): TabVisualStateStyle
 	if isDisabled(props) then
-		return (buttonStyle.disabled or buttonStyle.default or {}) :: TabVisualStateStyle
+		return buttonStyle.disabled or buttonStyle.default or {}
 	end
 
 	if isSelected(props) then
-		return (buttonStyle.selected or buttonStyle.default or {}) :: TabVisualStateStyle
+		return buttonStyle.selected or buttonStyle.default or {}
 	end
 
 	if hovered() then
-		return (buttonStyle.hover or buttonStyle.default or {}) :: TabVisualStateStyle
+		return buttonStyle.hover or buttonStyle.default or {}
 	end
 
-	return (buttonStyle.default or {}) :: TabVisualStateStyle
+	return buttonStyle.default or {}
 end
 
 type ResolvedStyle = {
@@ -85,25 +84,26 @@ type ResolvedStyle = {
 	glossTransparency: NumberSequence,
 }
 
-local function resolveStyle(style: TabVisualStateStyle?, fallback: TabVisualStateStyle?): ResolvedStyle
-	local styleAny = (style or {}) :: any
-	local fallbackAny = (fallback or {}) :: any
+local function resolveStyle(style: TabVisualStateStyle, fallback: TabVisualStateStyle?): ResolvedStyle
+	local fallbackStyle = fallback or {}
+	local styleAny = style :: any
+	local fallbackAny = fallbackStyle :: any
 
 	return {
-		backgroundColor = styleAny.backgroundColor or fallbackAny.backgroundColor or Color3.fromRGB(255, 255, 255),
-		backgroundTransparency = if styleAny.backgroundTransparency ~= nil then styleAny.backgroundTransparency elseif fallbackAny.backgroundTransparency ~= nil then fallbackAny.backgroundTransparency else 0,
-		gradient = styleAny.gradient or fallbackAny.gradient or ColorSequence.new(Color3.fromRGB(255, 255, 255)),
-		gradientRotation = if styleAny.gradientRotation ~= nil then styleAny.gradientRotation elseif fallbackAny.gradientRotation ~= nil then fallbackAny.gradientRotation else 0,
-		strokeColor = styleAny.strokeColor or fallbackAny.strokeColor or Color3.fromRGB(255, 255, 255),
-		strokeTransparency = if styleAny.strokeTransparency ~= nil then styleAny.strokeTransparency elseif fallbackAny.strokeTransparency ~= nil then fallbackAny.strokeTransparency else 0,
-		strokeThickness = if styleAny.strokeThickness ~= nil then styleAny.strokeThickness elseif fallbackAny.strokeThickness ~= nil then fallbackAny.strokeThickness else 1,
-		strokeGradient = styleAny.strokeGradient or fallbackAny.strokeGradient or ColorSequence.new(Color3.fromRGB(255, 255, 255)),
-		strokeGradientRotation = if styleAny.strokeGradientRotation ~= nil then styleAny.strokeGradientRotation elseif fallbackAny.strokeGradientRotation ~= nil then fallbackAny.strokeGradientRotation else 0,
-		textColor = styleAny.textColor or fallbackAny.textColor or Color3.fromRGB(255, 255, 255),
-		textTransparency = if styleAny.textTransparency ~= nil then styleAny.textTransparency elseif fallbackAny.textTransparency ~= nil then fallbackAny.textTransparency else 0,
-		glossColor = styleAny.glossColor or fallbackAny.glossColor or Color3.fromRGB(255, 255, 255),
+		backgroundColor = style.backgroundColor or fallbackStyle.backgroundColor or Color3.fromRGB(255, 255, 255),
+		backgroundTransparency = if style.backgroundTransparency ~= nil then style.backgroundTransparency elseif fallbackStyle.backgroundTransparency ~= nil then fallbackStyle.backgroundTransparency else 0,
+		gradient = style.gradient or fallbackStyle.gradient or ColorSequence.new(Color3.fromRGB(255, 255, 255)),
+		gradientRotation = if style.gradientRotation ~= nil then style.gradientRotation elseif fallbackStyle.gradientRotation ~= nil then fallbackStyle.gradientRotation else 0,
+		strokeColor = style.strokeColor or fallbackStyle.strokeColor or Color3.fromRGB(255, 255, 255),
+		strokeTransparency = if style.strokeTransparency ~= nil then style.strokeTransparency elseif fallbackStyle.strokeTransparency ~= nil then fallbackStyle.strokeTransparency else 0,
+		strokeThickness = if style.strokeThickness ~= nil then style.strokeThickness elseif fallbackStyle.strokeThickness ~= nil then fallbackStyle.strokeThickness else 1,
+		strokeGradient = style.strokeGradient or fallbackStyle.strokeGradient or ColorSequence.new(Color3.fromRGB(255, 255, 255)),
+		strokeGradientRotation = if style.strokeGradientRotation ~= nil then style.strokeGradientRotation elseif fallbackStyle.strokeGradientRotation ~= nil then fallbackStyle.strokeGradientRotation else 0,
+		textColor = style.textColor or fallbackStyle.textColor or Color3.fromRGB(255, 255, 255),
+		textTransparency = if style.textTransparency ~= nil then style.textTransparency elseif fallbackStyle.textTransparency ~= nil then fallbackStyle.textTransparency else 0,
+		glossColor = style.glossColor or fallbackStyle.glossColor or Color3.fromRGB(255, 255, 255),
 		glossBackgroundTransparency = if styleAny.glossBackgroundTransparency ~= nil then styleAny.glossBackgroundTransparency elseif fallbackAny.glossBackgroundTransparency ~= nil then fallbackAny.glossBackgroundTransparency else 0,
-		glossTransparency = styleAny.glossTransparency or fallbackAny.glossTransparency or NumberSequence.new({
+		glossTransparency = style.glossTransparency or fallbackStyle.glossTransparency or NumberSequence.new({
 			NumberSequenceKeypoint.new(0, 1),
 			NumberSequenceKeypoint.new(0.5, 0.75),
 			NumberSequenceKeypoint.new(1, 0),
@@ -385,7 +385,7 @@ end
 local function TabButton(props: TabButtonProps)
 	local hovered = source(false)
 	local buttonStyle = mergeButtonStyle(props.style)
-	local fallbackStyle = (buttonStyle.default or DEFAULT_BUTTON_STYLE.default or {}) :: TabVisualStateStyle
+	local fallbackStyle = buttonStyle.default or DEFAULT_BUTTON_STYLE.default or {}
 
 	local function currentStyle(): TabVisualStateStyle
 		return getStateStyle(props, buttonStyle, hovered)

@@ -208,7 +208,7 @@ local function SideKickInfo(props: SideKickInfoProps)
 				}),
 				Effects.PulseGradientOffset({
 					phase = props.pulsePhase,
-					phaseMultiplier = 3,
+					phaseMultiplier = 1,
 
 					minOffset = Vector2.new(0, -0.35),
 					maxOffset = Vector2.new(0, 0),

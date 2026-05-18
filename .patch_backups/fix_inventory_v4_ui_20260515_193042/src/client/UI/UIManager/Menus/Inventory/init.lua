@@ -61,7 +61,13 @@ local function InventoryMenu(props: Types.InventoryMenuProps)
 		selectedSkinId(skin.SkinId)
 	end
 
-	local function equipSkin(skin: SkinItem) equippedSkinId(skin.SkinId) end
+	local function equipSkin(skin: SkinItem)
+		if skin.Locked or not skin.Owned then
+			return
+		end
+
+		equippedSkinId(skin.SkinId)
+	end
 
 	return Panel({
 		name = "InventoryMenu",

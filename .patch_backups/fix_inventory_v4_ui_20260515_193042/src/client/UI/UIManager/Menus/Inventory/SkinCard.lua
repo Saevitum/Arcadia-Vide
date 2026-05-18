@@ -3,37 +3,64 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Vide = require(ReplicatedStorage.Packages.vide)
+
 local SharedTypes = require(script.Parent.Parent.Parent.UITypes.SharedTypes)
 local MenuTypes = require(script.Parent.Parent.Parent.UITypes.MenuTypes)
 local Components = require(script.Parent.Parent.Parent.Components)
 local Effects = require(script.Parent.Parent.Parent.Effects)
-local Style = require(script.Parent.Parent.Parent.Style)
 
 Vide.strict = true
 
 local create = Vide.create
+
 local Text = Components.Text
 local Image = Components.Image
-
-local Tokens = Style.Tokens
 
 type Source<T> = SharedTypes.Source<T>
 type SkinItem = MenuTypes.SkinItem
 
 export type SkinCardProps = {
 	skin: SkinItem,
+
 	selectedSkinId: Source<string?>,
 	equippedSkinId: Source<string?>,
+
 	layoutOrder: number?,
 	zIndex: number?,
+
 	onSelected: (skin: SkinItem) -> (),
 }
 
 local EQUIPPED_IMAGE = "rbxassetid://13415241367"
+local LOCKED_IMAGE = "rbxassetid://14608383463"
 local SELECTED_IMAGE = "rbxassetid://13415286900"
 
 local function getRarityColor(rarity: string): Color3
-	return (Tokens.RarityColors :: { [string]: Color3 })[rarity] or Tokens.Colors.White
+	if rarity == "Common" then
+		return Color3.fromRGB(175, 180, 190)
+	end
+
+	if rarity == "Uncommon" then
+		return Color3.fromRGB(90, 255, 120)
+	end
+
+	if rarity == "Rare" then
+		return Color3.fromRGB(0, 255, 238)
+	end
+
+	if rarity == "Epic" then
+		return Color3.fromRGB(142, 5, 255)
+	end
+
+	if rarity == "Legendary" then
+		return Color3.fromRGB(255, 170, 0)
+	end
+
+	if rarity == "Mythic" then
+		return Color3.fromRGB(255, 0, 170)
+	end
+
+	return Color3.fromRGB(255, 255, 255)
 end
 
 local function isSelected(props: SkinCardProps): boolean
@@ -44,6 +71,10 @@ local function isEquipped(props: SkinCardProps): boolean
 	return props.equippedSkinId() == props.skin.SkinId
 end
 
+local function isLocked(props: SkinCardProps): boolean
+	return props.skin.Locked or not props.skin.Owned
+end
+
 local function SkinCard(props: SkinCardProps)
 	local skin = props.skin
 	local rarityColor = getRarityColor(skin.Rarity)
@@ -51,15 +82,20 @@ local function SkinCard(props: SkinCardProps)
 
 	return create("ImageButton")({
 		Name = `SkinCard_{skin.SkinId}`,
+
 		Image = skin.ImageId,
 		ImageTransparency = 0,
-		ImageColor3 = Tokens.Colors.White,
+		ImageColor3 = Color3.fromRGB(255, 255, 255),
 		ScaleType = Enum.ScaleType.Stretch,
+
 		AutoButtonColor = false,
+
 		Size = UDim2.fromScale(1, 1),
+
 		BackgroundTransparency = 1,
-		BackgroundColor3 = Tokens.Colors.DarkGlass,
+		BackgroundColor3 = Color3.fromRGB(10, 11, 18),
 		BorderSizePixel = 0,
+
 		LayoutOrder = props.layoutOrder or 0,
 		ZIndex = zIndex,
 
@@ -68,18 +104,20 @@ local function SkinCard(props: SkinCardProps)
 		end,
 
 		create("UICorner")({
-			CornerRadius = Tokens.Corners.Small,
+			CornerRadius = UDim.new(0.08, 0),
 		}),
 
 		create("UIStroke")({
 			Thickness = 2,
+
 			Color = function()
 				if isSelected(props) then
-					return Tokens.Colors.Magenta
+					return Color3.fromRGB(255, 0, 255)
 				end
 
 				return rarityColor
 			end,
+
 			Transparency = function()
 				if isSelected(props) then
 					return 0
@@ -87,10 +125,10 @@ local function SkinCard(props: SkinCardProps)
 
 				return 0.15
 			end,
+
 			ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
 		}),
 
-		-- Kept hidden for future deletion/select-delete mode.
 		Image({
 			name = "Selected",
 			image = SELECTED_IMAGE,
@@ -107,30 +145,52 @@ local function SkinCard(props: SkinCardProps)
 			size = UDim2.fromScale(0.339, 0.289),
 			position = UDim2.fromScale(0, 0),
 			anchorPoint = Vector2.new(0, 0),
+
 			visible = function()
 				return isEquipped(props)
 			end,
+
+			zIndex = zIndex + 4,
+		}),
+
+		Image({
+			name = "Locked",
+			image = LOCKED_IMAGE,
+			size = UDim2.fromScale(0.396, 0.472),
+			position = UDim2.fromScale(0.82, 0.6),
+			anchorPoint = Vector2.new(0.5, 0.5),
+
+			visible = function()
+				return isLocked(props)
+			end,
+
 			zIndex = zIndex + 4,
 		}),
 
 		Text({
 			name = "Title",
 			text = skin.Name,
+
 			size = UDim2.fromScale(0.843, 0.173),
 			position = UDim2.fromScale(0.5, 0.9),
 			anchorPoint = Vector2.new(0.5, 0.5),
-			fontFace = Tokens.Fonts.MichromaBoldItalic,
+
+			fontFace = Font.new("rbxasset://fonts/families/Michroma.json", Enum.FontWeight.Bold, Enum.FontStyle.Italic),
+
 			textScaled = true,
 			minTextSize = 7,
 			maxTextSize = 16,
-			textColor3 = Tokens.Colors.White,
+
+			textColor3 = Color3.fromRGB(255, 255, 255),
 			textXAlignment = Enum.TextXAlignment.Center,
 			textYAlignment = Enum.TextYAlignment.Center,
+
 			stroke = {
 				thickness = 2,
-				color = Tokens.Colors.Black,
+				color = Color3.fromRGB(0, 0, 0),
 				transparency = 0.1,
 			},
+
 			zIndex = zIndex + 5,
 		}),
 

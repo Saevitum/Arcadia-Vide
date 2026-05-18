@@ -16,7 +16,7 @@ local action = Vide.action
 local cleanup = Vide.cleanup
 local effect = Vide.effect
 
-type TabButtonProps = Types.TabButtonProps<string>
+type TabButtonProps = Types.TabButtonProps
 type TabButtonStyle = Types.TabButtonStyle
 type TabVisualStateStyle = Types.TabVisualStateStyle
 type Source<T> = Types.Source<T>

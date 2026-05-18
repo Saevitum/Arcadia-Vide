@@ -19,16 +19,16 @@ local ActionButton = Components.ActionButton
 local Tokens = Style.Tokens
 local Gradients = Style.Gradients
 
-type Source<T> = SharedTypes.Source<T>
+type Source = SharedTypes.Source
 type InventoryTabId = MenuTypes.InventoryTabId
 type SkinItem = MenuTypes.SkinItem
 
 export type SelectedSkinInfoProps = {
-	selectedTab: Source<InventoryTabId>,
-	selectedSkin: Source<SkinItem?>,
-	equippedSkinId: Source<string?>,
-	accentColor: Source<Color3>,
-	pulsePhase: Source<number>,
+	selectedTab: Source,
+	selectedSkin: Source,
+	equippedSkinId: Source,
+	accentColor: Source,
+	pulsePhase: Source,
 	onEquip: ((skin: SkinItem) -> ())?,
 }
 

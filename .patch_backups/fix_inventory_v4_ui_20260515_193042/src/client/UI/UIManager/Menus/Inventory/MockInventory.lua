@@ -78,9 +78,9 @@ local SKINS: { SkinItem } = {
 		ImageId = "rbxassetid://13414458532",
 		Rarity = "Epic",
 		Description = "A premium armored skin with magenta pulse lines and reinforced cyber plating.",
-		Owned = true,
+		Owned = false,
 		Equipped = false,
-		Locked = false,
+		Locked = true,
 	},
 
 	{
@@ -89,9 +89,9 @@ local SKINS: { SkinItem } = {
 		ImageId = "rbxassetid://13414468097",
 		Rarity = "Legendary",
 		Description = "A radiant Arcadia champion skin powered by a high-density cyber core.",
-		Owned = true,
+		Owned = false,
 		Equipped = false,
-		Locked = false,
+		Locked = true,
 	},
 
 	{
@@ -100,9 +100,9 @@ local SKINS: { SkinItem } = {
 		ImageId = "rbxassetid://13415034457",
 		Rarity = "Mythic",
 		Description = "A forbidden prototype that bends light around its frame and leaves unstable energy scars.",
-		Owned = true,
+		Owned = false,
 		Equipped = false,
-		Locked = false,
+		Locked = true,
 	},
 
 	{
@@ -144,9 +144,9 @@ local SKINS: { SkinItem } = {
 		ImageId = "rbxassetid://13414458532",
 		Rarity = "Epic",
 		Description = "A refined space-tech skin forged for elite dashers and late-cycle progression.",
-		Owned = true,
+		Owned = false,
 		Equipped = false,
-		Locked = false,
+		Locked = true,
 	},
 
 	{
@@ -155,9 +155,9 @@ local SKINS: { SkinItem } = {
 		ImageId = "rbxassetid://13414468097",
 		Rarity = "Legendary",
 		Description = "A commanding premium skin with heavy black plating and controlled neon emission.",
-		Owned = true,
+		Owned = false,
 		Equipped = false,
-		Locked = false,
+		Locked = true,
 	},
 
 	{
@@ -166,9 +166,9 @@ local SKINS: { SkinItem } = {
 		ImageId = "rbxassetid://13415034457",
 		Rarity = "Mythic",
 		Description = "A rare eclipse-class avatar silhouette made for special events and high prestige.",
-		Owned = true,
+		Owned = false,
 		Equipped = false,
-		Locked = false,
+		Locked = true,
 	},
 }
 

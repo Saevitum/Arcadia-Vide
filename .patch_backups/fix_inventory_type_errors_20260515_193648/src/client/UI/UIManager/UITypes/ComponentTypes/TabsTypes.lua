@@ -2,8 +2,8 @@
 
 local SharedTypes = require(script.Parent.Parent.SharedTypes)
 
-export type Source<T> = SharedTypes.Source<T>
-export type Reactive<T> = SharedTypes.Reactive<T>
+export type Source = SharedTypes.Source
+export type Reactive = SharedTypes.Reactive
 
 export type TabDefinition = {
 	id: any,
@@ -70,29 +70,29 @@ export type TabStripStyle = {
 
 export type TabButtonProps = {
 	tab: TabDefinition,
-	selectedTab: Source<any>,
+	selectedTab: Source,
 	style: TabButtonStyle?,
-	size: Reactive<UDim2>?,
-	position: Reactive<UDim2>?,
-	anchorPoint: Reactive<Vector2>?,
-	visible: Reactive<boolean>?,
-	zIndex: Reactive<number>?,
+	size: Reactive?,
+	position: Reactive?,
+	anchorPoint: Reactive?,
+	visible: Reactive?,
+	zIndex: Reactive?,
 	onTabSelected: ((any) -> ())?,
 }
 
 export type TabStripProps = {
 	tabs: { TabDefinition },
-	selectedTab: Source<any>,
+	selectedTab: Source,
 	style: TabStripStyle?,
 	name: string?,
-	size: Reactive<UDim2>?,
-	position: Reactive<UDim2>?,
-	anchorPoint: Reactive<Vector2>?,
-	visible: Reactive<boolean>?,
-	zIndex: Reactive<number>?,
-	cellSize: Reactive<UDim2>?,
-	cellPadding: Reactive<UDim2>?,
-	fillDirectionMaxCells: Reactive<number>?,
+	size: Reactive?,
+	position: Reactive?,
+	anchorPoint: Reactive?,
+	visible: Reactive?,
+	zIndex: Reactive?,
+	cellSize: Reactive?,
+	cellPadding: Reactive?,
+	fillDirectionMaxCells: Reactive?,
 	onTabSelected: ((any) -> ())?,
 }
 

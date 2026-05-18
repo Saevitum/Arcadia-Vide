@@ -17,13 +17,13 @@ local Image = Components.Image
 
 local Tokens = Style.Tokens
 
-type Source<T> = SharedTypes.Source<T>
+type Source = SharedTypes.Source
 type SkinItem = MenuTypes.SkinItem
 
 export type SkinCardProps = {
 	skin: SkinItem,
-	selectedSkinId: Source<string?>,
-	equippedSkinId: Source<string?>,
+	selectedSkinId: Source,
+	equippedSkinId: Source,
 	layoutOrder: number?,
 	zIndex: number?,
 	onSelected: (skin: SkinItem) -> (),
