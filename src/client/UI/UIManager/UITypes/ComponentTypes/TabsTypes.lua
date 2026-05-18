@@ -1,9 +1,7 @@
 --!strict
 
-local SharedTypes = require(script.Parent.Parent.SharedTypes)
-
-export type Source<T> = SharedTypes.Source<T>
-export type Reactive<T> = SharedTypes.Reactive<T>
+export type Source<T> = (() -> T) & ((T) -> ())
+export type Reactive<T> = T | (() -> T)
 
 export type TabDefinition<T> = {
 	id: T,
@@ -44,9 +42,6 @@ export type TabButtonStyle = {
 	maxTextSize: number?,
 	hoverScale: number?,
 	hoverDuration: number?,
-	transitionDuration: number?,
-	transitionEasingStyle: Enum.EasingStyle?,
-	transitionEasingDirection: Enum.EasingDirection?,
 	textStrokeColor: Color3?,
 	textStrokeTransparency: number?,
 	textStrokeThickness: number?,

@@ -1,6 +1,6 @@
 --!strict
 
-return { StatsTree = require(script.StatsTree),
+return {
 	SideKickMenu = require(script.SideKicks),
 	BoostersMenu = require(script.BoostersMenu),
 	ActivityMenu = require(script.Activity),
