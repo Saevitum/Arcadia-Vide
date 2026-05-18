@@ -70,62 +70,6 @@ local function InventoryMenu(props: Types.InventoryMenuProps)
 		title = "INVENTORY",
 
 		content = create("Frame")({
-			Name = "InventoryDivider",
-			Size = DIVIDER_SIZE,
-			Position = DIVIDER_POSITION,
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			BackgroundColor3 = Style.Tokens.Colors.White,
-			BackgroundTransparency = 1,
-			BorderSizePixel = 0,
-			ZIndex = 22,
-
-			Effects.FadeGuiObject({
-				open = hasSelectedSkin,
-				openTransparency = 0,
-				closedTransparency = 1,
-				openDuration = 3,
-				closeDuration = 0.08,
-				easingStyle = Enum.EasingStyle.Quad,
-				easingDirection = Enum.EasingDirection.Out,
-				hideWhenClosed = true,
-			}),
-
-			create("UIGradient")({
-				Rotation = 90,
-				Color = ColorSequence.new({
-					ColorSequenceKeypoint.new(0, Style.Tokens.Colors.White),
-					ColorSequenceKeypoint.new(0.5, Style.Tokens.Colors.CyanBright),
-					ColorSequenceKeypoint.new(1, Style.Tokens.Colors.White),
-				}),
-				Transparency = NumberSequence.new({
-					NumberSequenceKeypoint.new(0, 1),
-					NumberSequenceKeypoint.new(0.5, 0),
-					NumberSequenceKeypoint.new(1, 1),
-				}),
-
-				Effects.SweepGradientKeypoint({
-					phase = pulsePhase,
-					edgeColor = Style.Tokens.Colors.White,
-					middleColors = {
-						Style.Tokens.Colors.CyanBright,
-						Style.Tokens.Colors.Magenta,
-						Style.Tokens.Colors.Red,
-					},
-					edgeTransparency = 1,
-					middleTransparency = 0,
-					loopsPerColor = 3,
-					segmentDuration = 1.2,
-					easingStyle = Enum.EasingStyle.Sine,
-					easingDirection = Enum.EasingDirection.InOut,
-					colorTweenDuration = 0.45,
-					colorEasingStyle = Enum.EasingStyle.Sine,
-					colorEasingDirection = Enum.EasingDirection.InOut,
-					onColorChanged = function(color: Color3)
-						accentColor(color)
-					end,
-				}),
-			}),
-		}), ({
 			Name = "InventoryContent",
 
 			Size = UDim2.fromScale(1, 1),

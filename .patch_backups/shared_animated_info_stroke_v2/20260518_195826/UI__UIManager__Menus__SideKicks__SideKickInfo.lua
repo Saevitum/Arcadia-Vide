@@ -16,7 +16,7 @@ local cleanup = Vide.cleanup
 local effect = Vide.effect
 
 local Text = Components.Text
-local Image = Components.Image local AnimatedInfoStroke = Components.AnimatedInfoStroke
+local Image = Components.Image
 
 type MockSideKick = MockSideKicks.MockSideKick
 
@@ -184,27 +184,7 @@ local function SideKickInfo(props: SideKickInfoProps)
 			hideWhenClosed = true,
 		}),
 
-		AnimatedInfoStroke({
-			name = "SideKickInfoStroke",
-			accentColor = props.accentColor,
-			pulsePhase = props.pulsePhase,
-			colorMode = "StartAccent",
-			whiteColor = Color3.fromRGB(255, 255, 255),
-			thickness = 2,
-			strokeTransparency = 0,
-			rotation = 90,
-			gradientTransparency = NumberSequence.new({
-				NumberSequenceKeypoint.new(0, 0),
-				NumberSequenceKeypoint.new(0.602, 0.828),
-				NumberSequenceKeypoint.new(1, 1),
-			}),
-			minOffset = Vector2.new(0, -0.35),
-			maxOffset = Vector2.new(0, 0),
-			dividerCyclesPerInfoPulse = 3,
-			colorTweenDuration = 0.45,
-			colorEasingStyle = Enum.EasingStyle.Sine,
-			colorEasingDirection = Enum.EasingDirection.InOut,
-		}), ({
+		create("UIStroke")({
 			Color = Color3.fromRGB(255, 255, 255),
 			Thickness = 2,
 			Transparency = 0,

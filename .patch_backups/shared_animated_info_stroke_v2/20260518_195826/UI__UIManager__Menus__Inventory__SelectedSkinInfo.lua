@@ -14,7 +14,7 @@ Vide.strict = true
 local create = Vide.create
 local Text = Components.Text
 local Image = Components.Image
-local ActionButton = Components.ActionButton local AnimatedInfoStroke = Components.AnimatedInfoStroke
+local ActionButton = Components.ActionButton
 
 local Tokens = Style.Tokens
 local Gradients = Style.Gradients
@@ -112,23 +112,7 @@ local function SelectedSkinInfo(props: SelectedSkinInfoProps)
 			hideWhenClosed = true,
 		}),
 
-		AnimatedInfoStroke({
-			name = "SelectedSkinInfoStroke",
-			accentColor = props.accentColor,
-			pulsePhase = props.pulsePhase,
-			colorMode = "EdgeAccent",
-			whiteColor = Tokens.Colors.White,
-			thickness = 2,
-			strokeTransparency = 0,
-			rotation = 90,
-			gradientTransparency = Gradients.strokePulseTransparency(),
-			minOffset = Vector2.new(0, -0.35),
-			maxOffset = Vector2.new(0, 0),
-			dividerCyclesPerInfoPulse = 3,
-			colorTweenDuration = 0.45,
-			colorEasingStyle = Enum.EasingStyle.Sine,
-			colorEasingDirection = Enum.EasingDirection.InOut,
-		}), ({
+		create("UIStroke")({
 			Color = Tokens.Colors.White,
 			Thickness = 2,
 			Transparency = 0,
