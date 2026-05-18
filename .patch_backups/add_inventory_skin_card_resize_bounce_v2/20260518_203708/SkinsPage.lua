@@ -1,6 +1,6 @@
 --!strict
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage") local TweenService = game:GetService("TweenService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Vide = require(ReplicatedStorage.Packages.vide)
 
@@ -71,103 +71,7 @@ local function buildSkinCards(props: SkinsPageProps): { Instance }
 end
 
 local function SkinsPage(props: SkinsPageProps)
-	
-	local animatedCellSize = Vide.source(GRID_FULL_CELL_SIZE)
-	local cellSizeDriver = Instance.new("Vector3Value")
-	cellSizeDriver.Name = "SkinInventoryCellSizeDriver"
-	cellSizeDriver.Value = Vector3.new(GRID_FULL_CELL_SIZE.X.Scale, GRID_FULL_CELL_SIZE.Y.Scale, 0)
-
-	local activeCellSizeTweens: { Tween } = {}
-	local activeCellSizeConnection: RBXScriptConnection? = nil
-	local firstCellSizeRun = true
-	local cellSizeRunId = 0
-
-	local function cancelCellSizeTweens()
-		for _, tween in ipairs(activeCellSizeTweens) do
-			tween:Cancel()
-		end
-
-		table.clear(activeCellSizeTweens)
-
-		if activeCellSizeConnection ~= nil then
-			activeCellSizeConnection:Disconnect()
-			activeCellSizeConnection = nil
-		end
-	end
-
-	local function setAnimatedCellSizeFromDriver()
-		local value = cellSizeDriver.Value
-		animatedCellSize(UDim2.fromScale(value.X, value.Y))
-	end
-
-	local cellSizeChangedConnection = cellSizeDriver:GetPropertyChangedSignal("Value"):Connect(setAnimatedCellSizeFromDriver)
-	setAnimatedCellSizeFromDriver()
-
-	Vide.effect(function()
-		cellSizeRunId += 1
-		local currentRunId = cellSizeRunId
-
-		local target = if hasSelectedSkin(props) then GRID_DETAIL_CELL_SIZE else GRID_FULL_CELL_SIZE
-		local targetValue = Vector3.new(target.X.Scale, target.Y.Scale, 0)
-
-		if firstCellSizeRun then
-			firstCellSizeRun = false
-			cellSizeDriver.Value = targetValue
-			setAnimatedCellSizeFromDriver()
-			return
-		end
-
-		cancelCellSizeTweens()
-
-		local currentValue = cellSizeDriver.Value
-		local overshootAmount = 0.09
-		local overshootValue = Vector3.new(
-			targetValue.X + ((targetValue.X - currentValue.X) * overshootAmount),
-			targetValue.Y + ((targetValue.Y - currentValue.Y) * overshootAmount),
-			0
-		)
-
-		local firstTween = TweenService:Create(
-			cellSizeDriver,
-			TweenInfo.new(0.22, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
-			{
-				Value = overshootValue,
-			}
-		)
-
-		local settleTween = TweenService:Create(
-			cellSizeDriver,
-			TweenInfo.new(0.16, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
-			{
-				Value = targetValue,
-			}
-		)
-
-		table.insert(activeCellSizeTweens, firstTween)
-		table.insert(activeCellSizeTweens, settleTween)
-
-		activeCellSizeConnection = firstTween.Completed:Connect(function(playbackState: Enum.PlaybackState)
-			if playbackState ~= Enum.PlaybackState.Completed then
-				return
-			end
-
-			if currentRunId ~= cellSizeRunId then
-				return
-			end
-
-			settleTween:Play()
-		end)
-
-		firstTween:Play()
-	end)
-
-	Vide.cleanup(function()
-		cancelCellSizeTweens()
-		cellSizeChangedConnection:Disconnect()
-		cellSizeDriver:Destroy()
-	end)
-
-return create("CanvasGroup")({
+	return create("CanvasGroup")({
 		Name = "SkinInventoryPage",
 
 		Size = UDim2.fromScale(1, 1),
@@ -233,7 +137,13 @@ return create("CanvasGroup")({
 			},
 
 			grid = {
-				cellSize = function() return animatedCellSize() end,
+				cellSize = function()
+					if hasSelectedSkin(props) then
+						return GRID_DETAIL_CELL_SIZE
+					end
+
+					return GRID_FULL_CELL_SIZE
+				end,
 
 				cellPadding = GRID_CELL_PADDING,
 
