@@ -20,24 +20,12 @@ local function lerpNumber(a: number, b: number, alpha: number): number
 end
 
 local function lerpVector2(a: Vector2, b: Vector2, alpha: number): Vector2
-	return Vector2.new(
-		lerpNumber(a.X, b.X, alpha),
-		lerpNumber(a.Y, b.Y, alpha)
-	)
-end
-
-local function phaseToPingPongAlpha(phase: number): number
-	phase = phase % 1
-
-	if phase < 0.5 then
-		return phase / 0.5
-	end
-
-	return 1 - ((phase - 0.5) / 0.5)
+	return Vector2.new(lerpNumber(a.X, b.X, alpha), lerpNumber(a.Y, b.Y, alpha))
 end
 
 local function PulseGradientOffset(options: Types.PulseGradientOffsetOptions?)
 	local minOffset = if options ~= nil and options.minOffset ~= nil then options.minOffset else DEFAULT_MIN_OFFSET
+
 	local maxOffset = if options ~= nil and options.maxOffset ~= nil then options.maxOffset else DEFAULT_MAX_OFFSET
 
 	return action(function(instance: Instance)
@@ -47,29 +35,20 @@ local function PulseGradientOffset(options: Types.PulseGradientOffsetOptions?)
 
 		local gradient = instance :: UIGradient
 
-		local phaseSource = if options ~= nil then options.phase else nil
-		if phaseSource ~= nil then
-			local phaseMultiplier = if options ~= nil and options.phaseMultiplier ~= nil then options.phaseMultiplier else 1
-
-			-- The shared PulseDriver is a repeating 0 -> 1 source.
-			-- A fractional multiplier such as 1 / 3 needs to continue across driver resets.
-			-- Example:
-			--   divider phase cycles: 0->1, 0->1, 0->1
-			--   info phase at 1/3:   0.................1
-			local lastRawPhase = math.clamp(phaseSource(), 0, 1)
-			local completedCycles = 0
+		if options ~= nil and options.phase ~= nil then
+			local phaseMultiplier = if options.phaseMultiplier ~= nil then options.phaseMultiplier else 1
 
 			effect(function()
-				local rawPhase = math.clamp(phaseSource(), 0, 1)
+				local rawPhase = math.clamp(options.phase(), 0, 1)
+				local phase = (rawPhase * phaseMultiplier) % 1
 
-				if rawPhase < lastRawPhase then
-					completedCycles += 1
+				local alpha: number
+
+				if phase < 0.5 then
+					alpha = phase / 0.5
+				else
+					alpha = 1 - ((phase - 0.5) / 0.5)
 				end
-
-				lastRawPhase = rawPhase
-
-				local continuousPhase = (completedCycles + rawPhase) * phaseMultiplier
-				local alpha = phaseToPingPongAlpha(continuousPhase)
 
 				gradient.Offset = lerpVector2(maxOffset, minOffset, alpha)
 			end)
@@ -80,45 +59,35 @@ local function PulseGradientOffset(options: Types.PulseGradientOffsetOptions?)
 		local alive = true
 		local activeTween: Tween? = nil
 
-		local function tweenTo(offset: Vector2): boolean
-			if not alive then
-				return false
-			end
-
+		local function tweenTo(offset: Vector2)
 			if activeTween ~= nil then
 				activeTween:Cancel()
 				activeTween = nil
 			end
 
-			local tween = TweenService:Create(
-				gradient,
-				TweenInfo.new(1.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
-				{
+			local tween =
+				TweenService:Create(gradient, TweenInfo.new(1.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
 					Offset = offset,
-				}
-			)
+				})
 
 			activeTween = tween
 			tween:Play()
-
-			local playbackState = tween.Completed:Wait()
+			tween.Completed:Wait()
 
 			if activeTween == tween then
 				activeTween = nil
 			end
-
-			return alive and playbackState == Enum.PlaybackState.Completed
 		end
 
 		task.spawn(function()
 			while alive do
-				if not tweenTo(minOffset) then
+				tweenTo(minOffset)
+
+				if not alive then
 					break
 				end
 
-				if not tweenTo(maxOffset) then
-					break
-				end
+				tweenTo(maxOffset)
 			end
 		end)
 

@@ -118,13 +118,20 @@ local function SelectedSkinInfo(props: SelectedSkinInfoProps)
 			Transparency = 0,
 
 			create("UIGradient")({
-				Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, props.accentColor()), ColorSequenceKeypoint.new(0.5, Tokens.Colors.White), ColorSequenceKeypoint.new(1, props.accentColor()), }), Effects.TweenGradientAccentColor({ accentColor = props.accentColor, mode = "EdgeAccent", whiteColor = Tokens.Colors.White, duration = 0.45, easingStyle = Enum.EasingStyle.Sine, easingDirection = Enum.EasingDirection.InOut, }),
+				Color = function()
+					local color = props.accentColor()
+					return ColorSequence.new({
+						ColorSequenceKeypoint.new(0, color),
+						ColorSequenceKeypoint.new(0.5, Tokens.Colors.White),
+						ColorSequenceKeypoint.new(1, color),
+					})
+				end,
 				Rotation = 90,
 				Transparency = Gradients.strokePulseTransparency(),
 
 				Effects.PulseGradientOffset({
 					phase = props.pulsePhase,
-					phaseMultiplier = 1 / 3,
+					phaseMultiplier = 3,
 					minOffset = Vector2.new(0, -0.35),
 					maxOffset = Vector2.new(0, 0),
 				}),

@@ -8,7 +8,7 @@ return {
 	Spin = require(script.Spin),
 	PulseStrokeColor = require(script.PulseStrokeColor),
 	SweepGradientKeypoint = require(script.SweepGradientKeypoint),
-	PulseGradientOffset = require(script.PulseGradientOffset), TweenGradientAccentColor = require(script.TweenGradientAccentColor),
+	PulseGradientOffset = require(script.PulseGradientOffset),
 	LiquidGradient = require(script.LiquidGradient),
 	PulseDriver = require(script.PulseDriver),
 	PulseUIScale = require(script.PulseUIScale),

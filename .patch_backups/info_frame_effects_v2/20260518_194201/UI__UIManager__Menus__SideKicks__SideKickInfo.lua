@@ -190,7 +190,14 @@ local function SideKickInfo(props: SideKickInfoProps)
 			Transparency = 0,
 
 			create("UIGradient")({
-				Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, props.accentColor()), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255)), }), Effects.TweenGradientAccentColor({ accentColor = props.accentColor, mode = "StartAccent", duration = 0.45, easingStyle = Enum.EasingStyle.Sine, easingDirection = Enum.EasingDirection.InOut, }),
+				Color = function()
+					local color = props.accentColor()
+
+					return ColorSequence.new({
+						ColorSequenceKeypoint.new(0, color),
+						ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255)),
+					})
+				end,
 
 				Rotation = 90,
 
@@ -201,7 +208,7 @@ local function SideKickInfo(props: SideKickInfoProps)
 				}),
 				Effects.PulseGradientOffset({
 					phase = props.pulsePhase,
-					phaseMultiplier = 1 / 3,
+					phaseMultiplier = 3,
 
 					minOffset = Vector2.new(0, -0.35),
 					maxOffset = Vector2.new(0, 0),
