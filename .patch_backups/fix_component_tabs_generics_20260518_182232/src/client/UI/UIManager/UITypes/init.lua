@@ -39,13 +39,6 @@ export type ActionButtonProps = ComponentTypes.ActionButtonProps
 export type ToggleSwitchProps = ComponentTypes.ToggleSwitchProps
 export type ToggleButtonProps = ComponentTypes.ToggleButtonProps
 export type SliderProps = ComponentTypes.SliderProps
-export type TabDefinition<T> = ComponentTypes.TabDefinition<T>
-export type TabPadding = ComponentTypes.TabPadding
-export type TabVisualStateStyle = ComponentTypes.TabVisualStateStyle
-export type TabButtonStyle = ComponentTypes.TabButtonStyle
-export type TabStripStyle = ComponentTypes.TabStripStyle
-export type TabButtonProps<T> = ComponentTypes.TabButtonProps<T>
-export type TabStripProps<T> = ComponentTypes.TabStripProps<T>
 
 export type HoverScaleOptions = EffectTypes.HoverScaleOptions
 export type SpinOptions = EffectTypes.SpinOptions

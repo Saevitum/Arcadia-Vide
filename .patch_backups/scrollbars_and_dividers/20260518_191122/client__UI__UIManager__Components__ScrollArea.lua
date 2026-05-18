@@ -320,7 +320,7 @@ local function ScrollArea(props: ScrollAreaProps?)
 
 		ElasticBehavior = resolvedProps.elasticBehavior or Enum.ElasticBehavior.WhenScrollable,
 		VerticalScrollBarInset = resolvedProps.verticalScrollBarInset or Enum.ScrollBarInset.None,
-		VerticalScrollBarPosition = resolvedProps.verticalScrollBarPosition or Enum.VerticalScrollBarPosition.Right, HorizontalScrollBarInset = resolvedProps.horizontalScrollBarInset or Enum.ScrollBarInset.None,
+		HorizontalScrollBarInset = resolvedProps.horizontalScrollBarInset or Enum.ScrollBarInset.None,
 
 		createPadding(resolvedProps.padding),
 

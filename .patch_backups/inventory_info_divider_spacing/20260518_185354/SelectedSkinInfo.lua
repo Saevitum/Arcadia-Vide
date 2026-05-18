@@ -32,8 +32,8 @@ export type SelectedSkinInfoProps = {
 	onEquip: ((skin: SkinItem) -> ())?,
 }
 
-local INFO_SIZE = UDim2.fromScale(0.159, 0.52)
-local INFO_OPEN_POSITION = UDim2.fromScale(0.7475, 0.55)
+local INFO_SIZE = UDim2.fromScale(0.22, 0.52)
+local INFO_OPEN_POSITION = UDim2.fromScale(0.735, 0.55)
 local INFO_CLOSED_POSITION = UDim2.fromScale(1.05, 0.55)
 
 local function getSelected(props: SelectedSkinInfoProps): SkinItem?

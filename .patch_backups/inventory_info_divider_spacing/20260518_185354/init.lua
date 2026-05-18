@@ -32,8 +32,8 @@ local TAB_STYLE = Style.Tabs.Presets.CyberThreeTabs
 local TAB_STRIP_SIZE = UDim2.fromScale(0.42, 0.06)
 local TAB_STRIP_POSITION = UDim2.fromScale(0.5, 0.23)
 
-local DIVIDER_SIZE = UDim2.fromScale(0.0015, 0.5)
-local DIVIDER_POSITION = UDim2.fromScale(0.636, 0.55)
+local DIVIDER_SIZE = UDim2.fromScale(0.004, 0.5)
+local DIVIDER_POSITION = UDim2.fromScale(0.605, 0.55)
 
 local function InventoryMenu(props: Types.InventoryMenuProps)
 	local selectedTab: Source<InventoryTabId> = source("Skins" :: InventoryTabId)

@@ -67,7 +67,7 @@ export type ScrollAreaProps = {
 	scrollBarImageTransparency: Reactive<number>?,
 	elasticBehavior: Enum.ElasticBehavior?,
 	verticalScrollBarInset: Enum.ScrollBarInset?,
-	verticalScrollBarPosition: Enum.VerticalScrollBarPosition?, horizontalScrollBarInset: Enum.ScrollBarInset?,
+	horizontalScrollBarInset: Enum.ScrollBarInset?,
 	padding: ScrollAreaPaddingProps?,
 	layoutKind: ScrollAreaLayoutKind?,
 	grid: ScrollAreaGridProps?,

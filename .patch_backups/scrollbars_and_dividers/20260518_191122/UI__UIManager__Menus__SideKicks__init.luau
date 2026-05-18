@@ -117,7 +117,7 @@ local function SideKickMenu(props: Types.SideKickMenuProps)
 
 			ScrollArea({
 				name = "SideKickScrollArea",
-				verticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left, anchorPoint = SCROLL_ANCHOR_POINT,
+				anchorPoint = SCROLL_ANCHOR_POINT,
 				position = SCROLL_FULL_POSITION,
 				size = SCROLL_FULL_SIZE,
 

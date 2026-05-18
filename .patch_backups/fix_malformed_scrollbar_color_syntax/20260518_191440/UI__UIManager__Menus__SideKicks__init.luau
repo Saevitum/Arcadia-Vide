@@ -193,7 +193,7 @@ local function SideKickMenu(props: Types.SideKickMenuProps)
 				},
 
 				scrollBarThickness = 6,
-				scrollBarImageColor3 = Color3.fromRGB(0, 0, 0),
+				scrollBarImageColor3 = Color3.fromRGB(0, 0, 0), 0, 0),
 				scrollBarImageTransparency = 0,
 
 				automaticCanvasSize = Enum.AutomaticSize.None,

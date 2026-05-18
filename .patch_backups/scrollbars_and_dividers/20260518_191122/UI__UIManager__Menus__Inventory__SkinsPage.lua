@@ -118,7 +118,7 @@ local function SkinsPage(props: SkinsPageProps)
 		ScrollArea({
 			name = "SkinsScrollArea",
 
-			verticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left, size = PAGE_FULL_SIZE,
+			size = PAGE_FULL_SIZE,
 			position = PAGE_FULL_POSITION,
 			anchorPoint = PAGE_ANCHOR,
 
@@ -203,8 +203,8 @@ local function SkinsPage(props: SkinsPageProps)
 			},
 
 			scrollBarThickness = 5,
-			scrollBarImageColor3 = Color3.fromRGB(0, 0, 0),
-			scrollBarImageTransparency = 0,
+			scrollBarImageColor3 = Tokens.Colors.CyanBright,
+			scrollBarImageTransparency = 0.2,
 
 			automaticCanvasSize = Enum.AutomaticSize.None,
 			canvasSize = UDim2.fromOffset(0, 0),

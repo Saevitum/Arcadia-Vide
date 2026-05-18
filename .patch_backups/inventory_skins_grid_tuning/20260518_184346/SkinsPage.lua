@@ -34,16 +34,16 @@ export type SkinsPageProps = {
 
 local Tokens = Style.Tokens
 
-local PAGE_FULL_SIZE = UDim2.fromScale(0.75, 0.53)
+local PAGE_FULL_SIZE = UDim2.fromScale(0.7, 0.53)
 local PAGE_FULL_POSITION = UDim2.fromScale(0.5, 0.55)
 
-local PAGE_DETAIL_SIZE = UDim2.fromScale(0.5, 0.53)
-local PAGE_DETAIL_POSITION = UDim2.fromScale(0.38, 0.55)
+local PAGE_DETAIL_SIZE = UDim2.fromScale(0.45, 0.53)
+local PAGE_DETAIL_POSITION = UDim2.fromScale(0.35, 0.55)
 
 local PAGE_ANCHOR = Vector2.new(0.5, 0.5)
 
-local GRID_FULL_CELL_SIZE = UDim2.fromScale(0.1625, 0.385)
-local GRID_DETAIL_CELL_SIZE = UDim2.fromScale(0.1625, 0.265)
+local GRID_FULL_CELL_SIZE = UDim2.fromScale(0.1625, 0.305)
+local GRID_DETAIL_CELL_SIZE = UDim2.fromScale(0.1625, 0.28)
 local GRID_CELL_PADDING = UDim2.fromScale(0.03, 0.045)
 
 local function hasSelectedSkin(props: SkinsPageProps): boolean
@@ -118,7 +118,7 @@ local function SkinsPage(props: SkinsPageProps)
 		ScrollArea({
 			name = "SkinsScrollArea",
 
-			verticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left, size = PAGE_FULL_SIZE,
+			size = PAGE_FULL_SIZE,
 			position = PAGE_FULL_POSITION,
 			anchorPoint = PAGE_ANCHOR,
 
@@ -203,8 +203,8 @@ local function SkinsPage(props: SkinsPageProps)
 			},
 
 			scrollBarThickness = 5,
-			scrollBarImageColor3 = Color3.fromRGB(0, 0, 0),
-			scrollBarImageTransparency = 0,
+			scrollBarImageColor3 = Tokens.Colors.CyanBright,
+			scrollBarImageTransparency = 0.2,
 
 			automaticCanvasSize = Enum.AutomaticSize.None,
 			canvasSize = UDim2.fromOffset(0, 0),
