@@ -156,7 +156,51 @@ local function SkinsPage(props: SkinsPageProps)
 				sortOrder = Enum.SortOrder.LayoutOrder,
 			},
 
-			layoutTween = { isOpen = function() return hasSelectedSkin(props) end, targetSize = function() if hasSelectedSkin(props) then return PAGE_DETAIL_SIZE end return PAGE_FULL_SIZE end, targetPosition = function() if hasSelectedSkin(props) then return PAGE_DETAIL_POSITION end return PAGE_FULL_POSITION end, duration = 0.38, easingStyle = Enum.EasingStyle.Quint, easingDirection = Enum.EasingDirection.Out, bounce = { overshoot = 0.09, firstDuration = 0.22, settleDuration = 0.16, firstEasingStyle = Enum.EasingStyle.Quint, firstEasingDirection = Enum.EasingDirection.Out, settleEasingStyle = Enum.EasingStyle.Quint, settleEasingDirection = Enum.EasingDirection.Out, }, },
+			layoutTween = {
+				isOpen = function()
+					return hasSelectedSkin(props)
+				end,
+
+				targetSize = function()
+					if hasSelectedSkin(props) then
+						return PAGE_DETAIL_SIZE
+					end
+
+					return PAGE_FULL_SIZE
+				end,
+
+				targetPosition = function()
+					if hasSelectedSkin(props) then
+						return PAGE_DETAIL_POSITION
+					end
+
+					return PAGE_FULL_POSITION
+				end,
+
+				duration = 0.34,
+
+				openEasingStyle = Enum.EasingStyle.Back,
+				openEasingDirection = Enum.EasingDirection.Out,
+
+				closeEasingStyle = Enum.EasingStyle.Quad,
+				closeEasingDirection = Enum.EasingDirection.Out,
+
+				bounce = {
+					enabled = true,
+					open = true,
+					close = false,
+
+					overshoot = 0.035,
+					firstDuration = 0.22,
+					settleDuration = 0.12,
+
+					firstEasingStyle = Enum.EasingStyle.Quad,
+					firstEasingDirection = Enum.EasingDirection.Out,
+
+					settleEasingStyle = Enum.EasingStyle.Quad,
+					settleEasingDirection = Enum.EasingDirection.Out,
+				},
+			},
 
 			scrollBarThickness = 5,
 			scrollBarImageColor3 = Color3.fromRGB(0, 0, 0),

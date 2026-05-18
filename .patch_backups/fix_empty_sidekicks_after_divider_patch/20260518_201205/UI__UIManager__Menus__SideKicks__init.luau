@@ -225,7 +225,83 @@ local function SideKickMenu(props: Types.SideKickMenuProps)
 				onColorChanged = function(color: Color3)
 					dividerColor(color)
 				end,
-			}), SideKickInfo({
+			}), ({
+				Name = "SideKickDivider",
+
+				Size = UDim2.fromScale(0.0015, 0.5),
+				Position = UDim2.fromScale(0.639, 0.49),
+				AnchorPoint = Vector2.new(0.5, 0.5),
+
+				Visible = false,
+				BackgroundTransparency = 1,
+
+				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+				BorderSizePixel = 0,
+				ZIndex = 16,
+
+				Effects.FadeGuiObject({
+					open = function()
+						return selectedSideKick() ~= nil
+					end,
+
+					openTransparency = 0,
+					closedTransparency = 1,
+
+					openDuration = 3,
+					closeDuration = 0.08,
+
+					easingStyle = Enum.EasingStyle.Quad,
+					easingDirection = Enum.EasingDirection.Out,
+
+					hideWhenClosed = true,
+				}),
+
+				create("UIGradient")({
+					Rotation = 90,
+
+					Color = ColorSequence.new({
+						ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+						ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 229, 255)),
+						ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255)),
+					}),
+
+					Transparency = NumberSequence.new({
+						NumberSequenceKeypoint.new(0, 1),
+						NumberSequenceKeypoint.new(0.5, 0),
+						NumberSequenceKeypoint.new(1, 1),
+					}),
+
+					Effects.SweepGradientKeypoint({
+						phase = pulsePhase,
+						edgeColor = Color3.fromRGB(255, 255, 255),
+
+						middleColors = {
+							Color3.fromRGB(0, 229, 255), -- cyan
+							Color3.fromRGB(255, 0, 255), -- magenta
+							Color3.fromRGB(255, 0, 60), -- redish
+						},
+
+						edgeTransparency = 1,
+						middleTransparency = 0,
+
+						loopsPerColor = 3,
+
+						segmentDuration = 1.2,
+						easingStyle = Enum.EasingStyle.Sine,
+						easingDirection = Enum.EasingDirection.InOut,
+
+						colorTweenDuration = 0.45,
+						colorEasingStyle = Enum.EasingStyle.Sine,
+						colorEasingDirection = Enum.EasingDirection.InOut,
+
+						onColorChanged = function(color: Color3)
+							dividerColor(color)
+						end,
+					}),
+				}),
+			}),
+
+			SideKickInfo({
 				selectedSideKick = selectedSideKick,
 				accentColor = dividerColor,
 				pulsePhase = pulsePhase,
