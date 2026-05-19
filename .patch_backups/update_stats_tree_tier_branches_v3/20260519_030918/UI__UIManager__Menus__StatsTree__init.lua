@@ -18,6 +18,11 @@ local cleanup = Vide.cleanup
 
 type Source<T> = (() -> T) & ((T) -> ())
 
+type Requirement = {
+	nodeId: string,
+	minLevel: number,
+}
+
 type NodeKind = "Group" | "Stat"
 
 type NodeDefinition = {
@@ -30,11 +35,9 @@ type NodeDefinition = {
 	effectShort: string?,
 	description: string?,
 
+	maxLevel: number?,
 	position: Vector2,
-
-	branchId: string?,
-	tier: number?,
-	maxTier: number?,
+	requires: { Requirement }?,
 }
 
 export type StatsTreeMenuProps = {
@@ -44,10 +47,10 @@ export type StatsTreeMenuProps = {
 
 local NODES: { NodeDefinition } = Data.nodes :: { NodeDefinition }
 
-local CANVAS_SIZE = Vector2.new(3600, 2600)
+local CANVAS_SIZE = Vector2.new(2400, 1600)
 local CANVAS_CENTER = CANVAS_SIZE / 2
 local NODE_SIZE = UDim2.fromOffset(148, 148)
-local MIN_ZOOM = 0.45
+local MIN_ZOOM = 0.55
 local MAX_ZOOM = 1.8
 local INITIAL_POINTS = 10
 local WHEEL_ACTION_NAME = "ArcadiaStatsTreeSinkMouseWheel"
@@ -56,72 +59,30 @@ local function getLevel(levels: { [string]: number }, nodeId: string): number
 	return levels[nodeId] or 0
 end
 
-local function getPreviousTierId(node: NodeDefinition): string?
-	if node.branchId == nil or node.tier == nil or node.tier <= 1 then
-		return nil
+local function requirementsMet(requirements: { Requirement }?, levels: { [string]: number }): boolean
+	if requirements == nil then
+		return true
 	end
 
-	return node.branchId .. "_" .. tostring(node.tier - 1)
-end
-
-local function getOwnedTierCount(branchId: string, levels: { [string]: number }): number
-	local count = 0
-
-	for _, node in ipairs(NODES) do
-		if node.kind == "Stat" and node.branchId == branchId and node.tier ~= nil then
-			if getLevel(levels, node.id) > 0 then
-				count += 1
-			end
+	for _, requirement in ipairs(requirements) do
+		if getLevel(levels, requirement.nodeId) < requirement.minLevel then
+			return false
 		end
 	end
 
-	return count
+	return true
 end
 
 local function isKnown(node: NodeDefinition, levels: { [string]: number }): boolean
-	if node.kind == "Group" then
-		return true
-	end
-
-	if node.tier == nil then
-		return true
-	end
-
-	if node.tier == 1 then
-		return true
-	end
-
-	local previousTierId = getPreviousTierId(node)
-
-	if previousTierId == nil then
-		return true
-	end
-
-	return getLevel(levels, previousTierId) > 0
+	return requirementsMet(node.requires, levels)
 end
 
-local function isNodeVisible(node: NodeDefinition, activeGroup: string?, levels: { [string]: number }): boolean
+local function isNodeVisible(node: NodeDefinition, activeGroup: string?): boolean
 	if node.kind == "Group" then
 		return activeGroup == nil or activeGroup == node.groupId
 	end
 
-	if activeGroup ~= node.groupId then
-		return false
-	end
-
-	if node.branchId == nil or node.tier == nil then
-		return true
-	end
-
-	-- Show owned tiers, the next known tier, and one mystery future tier.
-	-- Example:
-	--   owned I      -> Blue
-	--   next II      -> Gray known/clickable
-	--   future III   -> Gray ?
-	--   IV+          -> hidden
-	local ownedCount = getOwnedTierCount(node.branchId, levels)
-
-	return node.tier <= ownedCount + 2
+	return activeGroup == node.groupId
 end
 
 local function getNodeImage(
@@ -141,7 +102,14 @@ local function getNodeImage(
 		return Assets.GrayQuestionHex
 	end
 
-	if getLevel(levels, node.id) > 0 then
+	local level = getLevel(levels, node.id)
+	local maxLevel = node.maxLevel or 10
+
+	if level >= maxLevel then
+		return Assets.YellowHex
+	end
+
+	if level > 0 then
 		return Assets.BlueHex
 	end
 
@@ -200,7 +168,7 @@ local function nodeView(
 	local hovered: Source<boolean> = source(false)
 
 	local function known(): boolean
-		return isKnown(node, levels())
+		return node.kind == "Group" or isKnown(node, levels())
 	end
 
 	return create("ImageButton")({
@@ -219,7 +187,7 @@ local function nodeView(
 		ScaleType = Enum.ScaleType.Fit,
 		AutoButtonColor = false,
 		Visible = function()
-			return isNodeVisible(node, activeGroup(), levels())
+			return isNodeVisible(node, activeGroup())
 		end,
 		ZIndex = zIndex,
 
@@ -263,13 +231,13 @@ local function nodeView(
 			function()
 				return node.effectShort or ""
 			end,
-			UDim2.fromScale(0.5, 0.29),
-			UDim2.fromScale(0.74, 0.19),
+			UDim2.fromScale(0.5, 0.31),
+			UDim2.fromScale(0.74, 0.2),
 			zIndex + 4,
 			function()
 				return node.kind == "Stat" and known() and node.effectShort ~= nil
 			end,
-			19,
+			20,
 			Color3.fromRGB(255, 255, 255)
 		),
 
@@ -300,16 +268,31 @@ local function nodeView(
 		),
 
 		makeText(
+			"Level",
+			function()
+				return tostring(getLevel(levels(), node.id)) .. "/" .. tostring(node.maxLevel or 10)
+			end,
+			UDim2.fromScale(0.78, 0.18),
+			UDim2.fromScale(0.42, 0.2),
+			zIndex + 5,
+			function()
+				return node.kind == "Stat" and known()
+			end,
+			18,
+			Color3.fromRGB(255, 255, 255)
+		),
+
+		makeText(
 			"NoPoints",
 			"NO POINTS",
-			UDim2.fromScale(0.5, 0.88),
-			UDim2.fromScale(0.76, 0.15),
+			UDim2.fromScale(0.5, 0.87),
+			UDim2.fromScale(0.76, 0.16),
 			zIndex + 5,
 			function()
 				return node.kind == "Stat"
 					and known()
-					and getLevel(levels(), node.id) <= 0
 					and points() <= 0
+					and getLevel(levels(), node.id) < (node.maxLevel or 10)
 			end,
 			13,
 			Color3.fromRGB(255, 70, 70)
@@ -359,12 +342,15 @@ local function StatsTreeMenu(rawProps: StatsTreeMenuProps?)
 			return
 		end
 
-		if getLevel(levels(), node.id) > 0 then
+		local maxLevel = node.maxLevel or 10
+		local currentLevel = getLevel(levels(), node.id)
+
+		if currentLevel >= maxLevel then
 			return
 		end
 
 		local nextLevels: { [string]: number } = table.clone(levels()) :: { [string]: number }
-		nextLevels[node.id] = 1
+		nextLevels[node.id] = currentLevel + 1
 
 		levels(nextLevels)
 		points(math.max(0, points() - 1))
@@ -549,9 +535,9 @@ local function StatsTreeMenu(rawProps: StatsTreeMenuProps?)
 
 		makeText(
 			"Hint",
-			"CLICK HEXES TO SPEND POINTS  |  DRAG TO MOVE  |  MOUSE WHEEL TO ZOOM",
+			"DRAG TO MOVE  |  MOUSE WHEEL TO ZOOM",
 			UDim2.fromScale(0.5, 0.925),
-			UDim2.fromScale(0.5, 0.045),
+			UDim2.fromScale(0.36, 0.045),
 			230,
 			true,
 			18,

@@ -1,7 +1,6 @@
 --!strict
 
 export type NodeKind = "Group" | "Stat"
-export type DirectionName = "NW" | "NE" | "W" | "E" | "SW" | "SE"
 
 export type NodeDefinition = {
 	id: string,
@@ -31,29 +30,26 @@ type BranchDefinition = {
 	description: string,
 
 	origin: Vector2,
-
-	-- Tier I starts in this neighbor slot around the category hub.
-	firstSlot: DirectionName,
-
-	-- Tier II+ walks from the previous tier through these valid neighbor sides.
-	-- The path repeats if maxTier is longer than the list.
-	growthPath: { DirectionName },
-
+	direction: Vector2,
 	maxTier: number?,
 }
 
 -- Change this later if the stat cap changes.
 local MAX_TIER = 10
 
--- Visual neighbor offsets for the current 148x148 rendered hex assets.
--- These values are intentionally based on the root category layout that looked correct.
+-- Visual honeycomb spacing for the current 148x148 rendered hex assets.
 --
--- If the global honeycomb gap needs tuning, adjust these only.
+-- The category root triangle already looked correct with:
+--   Economy -> Skills  = SW
+--   Economy -> Stamina = SE
+--
+-- Branches use the same neighbor slots around their category hub.
+-- Horizontal branches need their own spacing so they do not feel too far away.
 local DIAGONAL_X = 118
 local DIAGONAL_Y = 68
 local HORIZONTAL_X = 180
 
-local DIRECTIONS: { [DirectionName]: Vector2 } = {
+local DIRECTIONS = {
 	NW = Vector2.new(-DIAGONAL_X, -DIAGONAL_Y),
 	NE = Vector2.new(DIAGONAL_X, -DIAGONAL_Y),
 	W = Vector2.new(-HORIZONTAL_X, 0),
@@ -79,36 +75,16 @@ local function roman(value: number): string
 	return ROMAN[value] or tostring(value)
 end
 
-local function dir(name: DirectionName): Vector2
-	return DIRECTIONS[name]
-end
-
-local function branchPosition(
-	origin: Vector2,
-	firstSlot: DirectionName,
-	growthPath: { DirectionName },
-	tier: number
-): Vector2
-	local position = origin + dir(firstSlot)
-
-	if tier <= 1 then
-		return position
-	end
-
-	for stepIndex = 2, tier do
-		local pathIndex = ((stepIndex - 2) % #growthPath) + 1
-		position = position + dir(growthPath[pathIndex])
-	end
-
-	return position
+local function branchPosition(origin: Vector2, direction: Vector2, tier: number): Vector2
+	return origin + (direction * tier)
 end
 
 -- Root category hubs:
 --          Economy
 --     Skills      Stamina
 local ECONOMY = Vector2.new(0, -DIAGONAL_Y)
-local SKILLS = ECONOMY + dir("SW")
-local STAMINA = ECONOMY + dir("SE")
+local SKILLS = ECONOMY + DIRECTIONS.SW
+local STAMINA = ECONOMY + DIRECTIONS.SE
 
 local nodes: { NodeDefinition } = {
 	{
@@ -143,8 +119,8 @@ local nodes: { NodeDefinition } = {
 local branches: { BranchDefinition } = {
 	-- ============================================================
 	-- ECONOMY
-	-- Tier I nodes occupy neighbor slots around Economy.
-	-- Tier II+ walks through available outer sides of each branch.
+	-- First-tier subtypes populate the ring around Economy.
+	-- Each subtype then continues outward from that ring slot.
 	-- ============================================================
 	{
 		groupId = "Economy",
@@ -154,8 +130,7 @@ local branches: { BranchDefinition } = {
 		effectShort = "+3%",
 		description = "+3% Money per tier.",
 		origin = ECONOMY,
-		firstSlot = "W",
-		growthPath = { "W", "NW", "W", "SW" },
+		direction = DIRECTIONS.W,
 	},
 	{
 		groupId = "Economy",
@@ -165,8 +140,7 @@ local branches: { BranchDefinition } = {
 		effectShort = "+3%",
 		description = "+3% EXP per tier.",
 		origin = ECONOMY,
-		firstSlot = "NW",
-		growthPath = { "NW", "W" },
+		direction = DIRECTIONS.NW,
 	},
 	{
 		groupId = "Economy",
@@ -176,8 +150,7 @@ local branches: { BranchDefinition } = {
 		effectShort = "+3%",
 		description = "+3% Points per tier.",
 		origin = ECONOMY,
-		firstSlot = "NE",
-		growthPath = { "NE", "E" },
+		direction = DIRECTIONS.NE,
 	},
 	{
 		groupId = "Economy",
@@ -187,8 +160,7 @@ local branches: { BranchDefinition } = {
 		effectShort = "+3%",
 		description = "+3% Gems per tier.",
 		origin = ECONOMY,
-		firstSlot = "SW",
-		growthPath = { "SW", "W" },
+		direction = DIRECTIONS.SW,
 	},
 	{
 		groupId = "Economy",
@@ -197,13 +169,12 @@ local branches: { BranchDefinition } = {
 		effectShort = "+2%",
 		description = "+2% Luck per tier.",
 		origin = ECONOMY,
-		firstSlot = "SE",
-		growthPath = { "SE", "E" },
+		direction = DIRECTIONS.SE,
 	},
 
 	-- ============================================================
 	-- SKILLS
-	-- Tier I nodes occupy neighbor slots around Skills.
+	-- First-tier subtypes populate slots around Skills.
 	-- ============================================================
 	{
 		groupId = "Skills",
@@ -213,8 +184,7 @@ local branches: { BranchDefinition } = {
 		effectShort = "-4%",
 		description = "-4% Cooldown per tier.",
 		origin = SKILLS,
-		firstSlot = "W",
-		growthPath = { "W", "NW", "W", "SW" },
+		direction = DIRECTIONS.W,
 	},
 	{
 		groupId = "Skills",
@@ -224,8 +194,7 @@ local branches: { BranchDefinition } = {
 		effectShort = "+4%",
 		description = "+4% Power per tier.",
 		origin = SKILLS,
-		firstSlot = "NW",
-		growthPath = { "NW", "W" },
+		direction = DIRECTIONS.NW,
 	},
 	{
 		groupId = "Skills",
@@ -235,13 +204,12 @@ local branches: { BranchDefinition } = {
 		effectShort = "+0.5s",
 		description = "+0.5 seconds Duration per tier.",
 		origin = SKILLS,
-		firstSlot = "SW",
-		growthPath = { "SW", "W" },
+		direction = DIRECTIONS.SW,
 	},
 
 	-- ============================================================
 	-- STAMINA
-	-- Tier I nodes occupy neighbor slots around Stamina.
+	-- Only two current subtype branches, but still uses ring slots.
 	-- ============================================================
 	{
 		groupId = "Stamina",
@@ -251,8 +219,7 @@ local branches: { BranchDefinition } = {
 		effectShort = "+10",
 		description = "+10 Max Stamina per tier.",
 		origin = STAMINA,
-		firstSlot = "NE",
-		growthPath = { "NE", "E" },
+		direction = DIRECTIONS.E,
 	},
 	{
 		groupId = "Stamina",
@@ -262,8 +229,7 @@ local branches: { BranchDefinition } = {
 		effectShort = "+1/s",
 		description = "+1/sec Regen per tier.",
 		origin = STAMINA,
-		firstSlot = "SE",
-		growthPath = { "SE", "E" },
+		direction = DIRECTIONS.SE,
 	},
 }
 
@@ -281,7 +247,7 @@ for _, branch in ipairs(branches) do
 			subtitle = if branch.subtitle ~= nil then branch.subtitle .. " " .. tierRoman else tierRoman,
 			effectShort = branch.effectShort,
 			description = branch.description,
-			position = branchPosition(branch.origin, branch.firstSlot, branch.growthPath, tier),
+			position = branchPosition(branch.origin, branch.direction, tier),
 			branchId = branch.branchId,
 			tier = tier,
 			maxTier = maxTier,
